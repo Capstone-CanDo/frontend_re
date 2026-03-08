@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router"; // 쿼리 받기
+import { Stack, useLocalSearchParams } from "expo-router"; // 쿼리 받기
 import React from "react";
 import { ScanResult } from "../components/ScanResult";
 
@@ -20,5 +20,8 @@ console.log("체크2 - ScanResult 타입:", typeof ScanResult);
 if (typeof ScanResult !== 'function') {
   //return <View><Text>ScanResult 컴포넌트 로드 실패!</Text></View>;
 }
-  return <ScanResult url={url} onBack={handleBack} />;
+  return (<>
+    <Stack.Screen options={{ title: "큐트캡" }} />
+  <ScanResult url={url} onBack={handleBack} />
+  </>);
 }
