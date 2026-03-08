@@ -21,7 +21,7 @@ if (typeof ScanResult !== 'function') {
   //return <View><Text>ScanResult 컴포넌트 로드 실패!</Text></View>;
 }
   return (<>
-    <Stack.Screen options={{ title: "큐트캡" }} />
+    <Stack.Screen options={{ title: "큐트래블" }} />
   <ScanResult url={url} onBack={handleBack} />
   </>);
 }
