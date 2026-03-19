@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleProp, StyleSheet, TextInput, TextStyle } from "react-native";
+import { theme } from "../../constants/index";
 
 interface InputProps {
   value?: string;
@@ -27,6 +28,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 12,
     fontSize: 16,
+    fontFamily: theme.fontFamily.regular,
   },
 });
 

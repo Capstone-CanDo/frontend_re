@@ -1,6 +1,7 @@
 import { MapPin, QrCode, Search, TrendingDown, TrendingUp } from "lucide-react-native";
 import React, { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
+import { theme } from "../../constants/index";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
@@ -131,7 +132,7 @@ export function ScanHistory() {
 
           <View style={styles.statcenterItem}>
             <View style={styles.statRow}>
-              <TrendingUp size={16} color="#16a34a" />
+              <TrendingUp size={16} color= {theme.colors.safe} />
               <Text style={styles.safeNumber}>{stats.safe}</Text>
             </View>
             <Text style={styles.statLabel}>안전</Text>
@@ -139,7 +140,7 @@ export function ScanHistory() {
 
           <View style={styles.statItem}>
             <View style={styles.statRow}>
-              <TrendingDown size={16} color="#dc2626" />
+              <TrendingDown size={16} color={theme.colors.danger} />
               <Text style={styles.dangerNumber}>{stats.malicious}</Text>
             </View>
             <Text style={styles.statLabel}>위험 차단</Text>
@@ -225,7 +226,7 @@ export function ScanHistory() {
               <View style={styles.bottomRow}>
                 
                 <View style={styles.locationRow}>
-                  <MapPin size={12} color="#6b7280" />
+                  <MapPin size={12} color={theme.fontcolor.second} />
                   <Text style={styles.locationText}>{record.location}</Text>
                 </View>
 

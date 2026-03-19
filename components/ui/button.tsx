@@ -1,5 +1,7 @@
 import React from "react";
 import { Pressable, StyleProp, StyleSheet, Text, TextStyle, ViewStyle } from "react-native";
+import { theme } from "../../constants/index";
+
 
 type Variant = "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
 type Size = "default" | "sm" | "lg" | "icon";
@@ -53,6 +55,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     fontWeight: "600",
+    fontFamily: theme.fontFamily.regular
   },
 
   disabled: {
@@ -62,21 +65,21 @@ const styles = StyleSheet.create({
 
 const variantStyles = {
   default: {
-    backgroundColor: "#2563eb",
+    backgroundColor: theme.colors.primary,
   },
 
   destructive: {
-    backgroundColor: "#ef4444",
+    backgroundColor: theme.colors.danger,
   },
 
   outline: {
     borderWidth: 1,
-    borderColor: "#d1d5db",
+    borderColor: theme.colors.border,
     backgroundColor: "transparent",
   },
 
   secondary: {
-    backgroundColor: "#e5e7eb",
+    backgroundColor: theme.colors.secondbackground,
   },
 
   ghost: {

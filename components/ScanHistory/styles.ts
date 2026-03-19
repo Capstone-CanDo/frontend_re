@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { theme } from "../../constants/index";
 
 export const styles = StyleSheet.create({
 
@@ -21,7 +22,7 @@ content: {
   header: {
     height: 144,
      width: "100%",
-    backgroundColor: "#2563eb",
+    backgroundColor: theme.colors.primary,
     padding: 24,
     paddingBottom: 48,
   },
@@ -34,17 +35,19 @@ content: {
 },
 
   headerTitle: {
-  fontSize: 24,
+  fontSize: theme.fontSize.xl,
   lineHeight: 32,
   fontWeight: "500",
-  color: "#FFFFFF",
+  color: theme.fontcolor.historyheader,
+  fontFamily: theme.fontFamily.bold,
 },
 
   headerSub: {
-    fontSize: 16,
+    fontSize: theme.fontSize.md,
   lineHeight: 24,
-    color: "#DBEAFE",
+    color: theme.fontcolor.historysub,
     marginTop: 5,
+    fontFamily: theme.fontFamily.medium,
   },
 
   statsCard: {
@@ -99,18 +102,21 @@ content: {
   safeNumber: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#16a34a",
+    color: theme.colors.safe,
+    fontFamily: theme.fontFamily.regular,
   },
 
   dangerNumber: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#dc2626",
+    color: theme.colors.danger,
+    fontFamily: theme.fontFamily.regular,
   },
 
   statLabel: {
     fontSize: 12,
-    color: "#6b7280",
+    color: theme.fontcolor.second,
+    fontFamily: theme.fontFamily.regular,
   },
 
   searchRow: {
@@ -128,19 +134,19 @@ content: {
 },
 
 allActive: {
-  backgroundColor: "#2563eb",
+  backgroundColor: theme.colors.primary,
 },
 
 safeActive: {
-  backgroundColor: "#16a34a",
+  backgroundColor: theme.colors.safe,
 },
 
 dangerActive: {
-  backgroundColor: "#dc2626",
+  backgroundColor: theme.colors.danger,
 },
 
 warningActive: {
-  backgroundColor: "#ca8a04",
+  backgroundColor: theme.colors.warning,
 },
 
   input: {
@@ -155,15 +161,15 @@ warningActive: {
     borderRadius: 12,
   },
   safeCard: {
-  borderColor: "#16a34a",
+  borderColor: theme.colors.safe,
 },
 
 maliciousCard: {
-  borderColor: "#dc2626",
+  borderColor: theme.colors.danger,
 },
 
 suspiciousCard: {
-  borderColor: "#ca8a04",
+  borderColor: theme.colors.warning,
 },
 
   cardRow: {
@@ -187,7 +193,8 @@ suspiciousCard: {
 
   metaText: {
     fontSize: 12,
-    color: "#6b7280",
+    color: theme.fontcolor.second,
+    fontFamily: theme.fontFamily.regular,
   },
 
   bottomRow: {
@@ -204,7 +211,8 @@ suspiciousCard: {
 
   locationText: {
     fontSize: 12,
-    color: "#6b7280",
+    color: theme.fontcolor.second,
+    fontFamily: theme.fontFamily.regular,
   },
 
 

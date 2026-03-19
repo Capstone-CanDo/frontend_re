@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { theme } from "../../constants/index";
 
 type BadgeVariant = "default" | "secondary" | "destructive" | "outline";
 
@@ -37,45 +38,46 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 12,
     fontWeight: "500",
+    fontFamily: theme.fontFamily.regular,
   },
 });
 
 const variantStyles = {
   default: {
-    backgroundColor: "#16a34a",
+    backgroundColor: theme.colors.safe,
     borderColor: "transparent",
   },
 
   secondary: {
-    backgroundColor: "#ca8a04",
+    backgroundColor: theme.colors.warning,
     borderColor: "transparent",
   },
 
   destructive: {
-    backgroundColor: "#ef4444",
+    backgroundColor: theme.colors.danger,
     borderColor: "transparent",
   },
 
   outline: {
     backgroundColor: "transparent",
-    borderColor: "#d1d5db",
+    borderColor: theme.colors.border,
   },
 };
 
 const textVariantStyles = {
   default: {
-    color: "white",
+    color: theme.fontcolor.safe,
   },
 
   secondary: {
-    color: "white",
+    color: theme.fontcolor.warning,
   },
 
   destructive: {
-    color: "white",
+    color: theme.fontcolor.danger,
   },
 
   outline: {
-    color: "#111",
+    color: theme.fontcolor.outline,
   },
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { theme } from "../../constants/index";
 
 export function Card({ children, style }: any) {
   return <View style={[styles.card, style]}>{children}</View>;
@@ -47,11 +48,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: "bold",
+    fontFamily: theme.fontFamily.regular,
   },
 
   description: {
     fontSize: 14,
     color: "#666",
+    fontFamily: theme.fontFamily.regular,
   },
 
   content: {
