@@ -1,4 +1,4 @@
-import { MapPin, QrCode, Search, TrendingDown, TrendingUp } from "lucide-react-native";
+import { Globe, MapPin, QrCode, Search, TrendingDown, TrendingUp } from "lucide-react-native";
 import React, { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { theme } from "../../constants/index";
@@ -236,7 +236,14 @@ export function ScanHistory() {
 
             </View>
           </View>
-
+          {record.status === "safe" && (
+    <View style={styles.safebrowserbuttonview}>
+      <Button style = {styles.safebrowserbutton} onPress={() => console.log(record.url)}>
+        <Globe size={14} color={theme.fontcolor.defaultblack} />
+      <Text style = {styles.safebuttontext}>  보안 브라우저로 다시 열기</Text>
+    </Button>
+    </View>
+  )}
         </Card>
       ))}
       </View>

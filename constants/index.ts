@@ -31,6 +31,7 @@ export const theme = {
   fontcolor: {
     defalut: "white",
     second: "#6b7280",
+    defaultblack: "black",
     safe: "white",
     warning: "white",
     danger: "white",

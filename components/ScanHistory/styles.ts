@@ -155,7 +155,6 @@ warningActive: {
 
   card: {
     width: 344,
-    height: 100,
     marginHorizontal: 0,
     padding: 16,
     borderRadius: 12,
@@ -184,6 +183,7 @@ suspiciousCard: {
   url: {
     fontSize: 14,
     fontWeight: "500",
+    fontFamily: theme.fontFamily.regular,
   },
 
   metaRow: {
@@ -214,6 +214,20 @@ suspiciousCard: {
     color: theme.fontcolor.second,
     fontFamily: theme.fontFamily.regular,
   },
+  safebrowserbuttonview: {
 
+    paddingTop: 8,
+    backgroundColor: theme.colors.background,
+  },
+  safebrowserbutton: {
+    backgroundColor: theme.colors.secondbackground,
+    borderColor: theme.colors.border,
+  },
+   safebuttontext: {
+    fontSize: 14,
+    fontFamily: theme.fontFamily.regular,
+    color: theme.fontcolor.defaultblack,
+    fontWeight: "500",
+  },
 
 });
