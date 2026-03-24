@@ -1,6 +1,6 @@
-import { useLocalSearchParams } from "expo-router"; // 쿼리 받기
+import { Stack, useLocalSearchParams } from "expo-router"; // 쿼리 받기
 import React from "react";
-import { ScanResult } from "../components/ScanResult";
+import { ScanResult } from "../components/ScanResultFolder/ScanResult";
 
 export default function ScanResultScreen() {
   const { url } = useLocalSearchParams<{ url: string }>(); // 쿼리 타입 명시
@@ -20,5 +20,8 @@ console.log("체크2 - ScanResult 타입:", typeof ScanResult);
 if (typeof ScanResult !== 'function') {
   //return <View><Text>ScanResult 컴포넌트 로드 실패!</Text></View>;
 }
-  return <ScanResult url={url} onBack={handleBack} />;
+  return (<>
+    <Stack.Screen options={{ title: "큐트래블" }} />
+  <ScanResult url={url} onBack={handleBack} />
+  </>);
 }
