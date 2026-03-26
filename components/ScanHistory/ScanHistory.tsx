@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { Globe, MapPin, QrCode, Search, TrendingDown, TrendingUp } from "lucide-react-native";
 import React, { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
@@ -22,7 +23,7 @@ interface ScanRecord {
 export function ScanHistory() {
   const [searchQuery, setSearchQuery] = useState("");
    const [filterStatus, setFilterStatus] = useState<"all" | "safe" | "malicious" | "suspicious">("all");
-
+  const router = useRouter();
   const scanRecords: ScanRecord[] = [
     {
       id: 1,
@@ -238,7 +239,7 @@ export function ScanHistory() {
           </View>
           {record.status === "safe" && (
     <View style={styles.safebrowserbuttonview}>
-      <Button style = {styles.safebrowserbutton} onPress={() => console.log(record.url)}>
+      <Button style = {styles.safebrowserbutton} onPress={() => router.push(`/ScanResultScreen?url=${encodeURIComponent(record.url)}`)}>
         <Globe size={14} color={theme.fontcolor.defaultblack} />
       <Text style = {styles.safebuttontext}>  보안 브라우저로 다시 열기</Text>
     </Button>

@@ -154,7 +154,7 @@ warningActive: {
   },
 
   card: {
-    width: 344,
+    
     marginHorizontal: 0,
     padding: 16,
     borderRadius: 12,

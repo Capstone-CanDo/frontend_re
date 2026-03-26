@@ -22,7 +22,6 @@ export function Input({ value, onChangeText, placeholder, style }: InputProps) {
 
 const styles = StyleSheet.create({
   input: {
-    height: 40,
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 8,

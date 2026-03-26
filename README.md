@@ -1,78 +1,50 @@
-# frontend\_re
+# Welcome to your Expo app 👋
 
-expo 기반으로 다시 만든 프엔 레포
+This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
+## Get started
 
+1. Install dependencies
 
-## 0324 진행상황 \& 환경 가이드
+   ```bash
+   npm install
+   ```
 
+2. Start the app
 
+   ```bash
+   npx expo start
+   ```
 
-카메라 기능 추가했습니다. 현재 카메라로 QR 촬영 -> 결과 화면으로 이동 까지 구현한 상태입니다.
+In the output, you'll find options to open the app in a
 
-UI에서 검은색 반투명 테두리는 곡선 부분을 아직 구현을 못했습니다.
+- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
+- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
+- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-카메라에서 QR이 인식되는 범위 제한이 안되더라고요... 그래도 일단 피그마 프로토타입대로 구현했습니다.
+You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Get a fresh project
 
+When you're ready, run:
 
-json 파일 확인해주시고, install 다시 해주세요. 카메라 환경설정 부분이 ios에서도 되는지 한 번 확인해주세요.
+```bash
+npm run reset-project
+```
 
-파일 구조 변경이 있으니 확인해주세요.
+This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
+## Learn more
 
+To learn more about developing your project with Expo, look at the following resources:
 
+- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
+- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
+## Join the community
 
-## 0319 진행상황 \& 환경 가이드
+Join our community of developers creating universal apps.
 
-
-
-폰트 프리텐다드로 스캔 결과 화면만 일단 통일했습니다.
-
-import { theme } from "../../constants/index";
-
-text속성에 fontFamily: theme.fontFamily.regular 추가해주세요.
-
-
-
-
-
-asset/font 안에
-
-Pretendard-Regular.ttf
-
-Pretendard-Medium.ttf
-
-Pretendard-Bold.ttf
-
-이렇게 있어야 합니다. 파일 크기 때문에 깃허브에 올리지는 않고 알아서 넣어주세요.
-
-
-
-constants\\index.ts 안의 colors, fontcolor 이 부분 확인해주시면 감사하겠습니다. 만약 색상을 바꿀 경우 통일을 쉽게 하기 위함이니 한 번 확인해주세요.
-
-
-
-## 0307 진행상황 \& 환경 가이드
-
-
-
-피그마 QR 스캔 페이지와 스캔 분석 화면. 아직 카메라는 연결 못함
-
-
-
-package.json 확인. npm install로 다운로드 하세요.
-
-버전 등을 확인해주시기 바랍니다.
-
-
-
-먼저 npx create-expo-app QTravel 로 기본 앱 만든 후에
-
-app 폴더는 원래 있던 내용 제거하고 깃허브 코드로 교체.
-
-component 폴더에 있는 내용은 원래 있던 내용에 추가.
-
-초기 코드, asset은 정리할 예정이지만 지금은 없애면 오류남
-
+- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
+- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
