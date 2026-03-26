@@ -1,93 +1,53 @@
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
 import { ScanLine } from "lucide-react-native";
 import React, { useState } from "react";
 import { Linking, StyleSheet, Text, View } from "react-native";
-import {
-    Camera,
-    useCameraDevice,
-    useCameraPermission,
-    useCodeScanner
-} from "react-native-vision-camera";
 import { Button } from "../ui/button";
 import { styles } from "./camerastyle";
 
 export default function QRScannerScreen() {
-    console.log("QRScannerScreen 렌더링됨");
-  const { hasPermission, requestPermission } = useCameraPermission();
-  const device = useCameraDevice("back");
-    const router = useRouter();
+  console.log("QRScannerScreen 렌더링됨");
+
+  const [permission, requestPermission] = useCameraPermissions();
+  const router = useRouter();
   const [scanned, setScanned] = useState(false);
 
-const codeScanner = useCodeScanner({
-  codeTypes: ["qr"],
-  onCodeScanned: (codes) => {
-    if (scanned) return;
-
-    const value = codes[0]?.value;
-    if (!value) return;
-
-    setScanned(true);
-
-    router.push(`/ScanResultScreen?url=${encodeURIComponent(value)}`);
-  },
-});
-
-  // ❗ 권한 확인 중
-  console.log("hasPermission:", hasPermission);
-
   // ❗ 권한 없음
-  if (!hasPermission) {
-    console.log("권한 확인용");
-  return (
-    
-    <View style={styles.center}>
-      <Text>카메라 권한이 필요합니다</Text>
-    
-      <Button onPress={requestPermission}>
-        <Text>권한 요청</Text>
-      </Button>
-
-      <Button onPress={() => Linking.openSettings()}>
-        <Text>설정으로 이동</Text>
-      </Button>
-    </View>
-    
-  );
-}
-  /*if (!hasPermission) {
+  if (!permission?.granted) {
     return (
       <View style={localStyles.center}>
         <Text>카메라 권한이 필요합니다</Text>
+
         <Button onPress={requestPermission}>
-          <Text>권한 허용하기</Text>
+          <Text>권한 요청</Text>
+        </Button>
+
+        <Button onPress={() => Linking.openSettings()}>
+          <Text>설정으로 이동</Text>
         </Button>
       </View>
     );
-  }*/
-
-  // ❗ 카메라 준비 안됨
-  if (!device) {
-    
-    return (
-      <View style={localStyles.center}>
-        <Text>카메라 준비 중...</Text>
-      </View>
-    );
   }
-  // ✅ 정상 렌더링
 
   return (
-    
-    <View style={{width: "100%", flex: 1}}>
+    <View style={{ width: "100%", flex: 1 }}>
       {/* 📷 카메라 */}
-      <Camera
-        style={{flex:1}}
-        device={device}
-        isActive={true}
-        photo={true}
-        video={false}
-        codeScanner={codeScanner}
+      <CameraView
+        style={{ flex: 1 }}
+        facing="back"
+        barcodeScannerSettings={{
+          barcodeTypes: ["qr"],
+        }}
+        onBarcodeScanned={({ data }) => {
+          if (scanned) return;
+          if (!data) return;
+
+          setScanned(true);
+          router.push(`/ScanResultScreen?url=${encodeURIComponent(data)}`);
+        }}
       />
+
       <View style={styles.scanWrapper}>
         <View style={styles.scanBox}>
           {/* 코너 4개 */}
