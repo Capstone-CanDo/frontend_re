@@ -5,10 +5,10 @@ expo 기반으로 다시 만든 프엔 레포
 일단 스캔 결과 화면 적당히 만들어뒀습니다.
 앱 기동에 필요한 다른 자잘한 코드들 넣어뒀습니다.
 
-카메라 expo go에서도 돌아가게 하고 다시 확인 
--> 깃허브 반영해주시고
-npx expo uninstall react-native-vision-camera
-npx expo start -c
+카메라 패키지 변경
+-> 깃허브 반영해주시고<br>
+npx expo uninstall react-native-vision-camera<br>
+npx expo start -c<br>
 순으로 실행해주세요.
 
 ## 0324 진행상황 & 환경 가이드
