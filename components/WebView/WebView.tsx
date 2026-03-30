@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
-    ActivityIndicator,
-    Modal,
-    Text,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  Modal,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { WebView } from "react-native-webview";
 import { styles } from "./styles";
+
 
 interface WebViewModalProps {
   url: string;
@@ -25,6 +26,8 @@ export function WebViewModal({ url, isOpen, onClose }: WebViewModalProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [alerts, setAlerts] = useState<SecurityAlert[]>([]);
   const [showAlert, setShowAlert] = useState(false);
+  const webviewRef = useRef<WebView>(null);
+  const [canGoBack, setCanGoBack] = useState(false);
 
   useEffect(() => {
     if (isOpen) {

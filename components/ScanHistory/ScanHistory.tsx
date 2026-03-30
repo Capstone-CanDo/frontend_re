@@ -151,9 +151,17 @@ useFocusEffect(
 
     <Button
     onPress={async () => {
-    await clearScanRecords();
-    console.log("초기화 완료");
-  }}
+    setRecords([]); // ⭐ 먼저 UI 초기화
+
+  await clearScanRecords();
+
+  const newRecords = await loadScanRecords();
+  setRecords(newRecords);
+
+  console.log("초기화 완료");
+  }
+  
+}
     style={[filterStatus === "malicious" && styles.dangerActive, { paddingHorizontal: 13, paddingVertical: 6 }]}
   >
     삭제
@@ -204,7 +212,7 @@ useFocusEffect(
     <View style={styles.safebrowserbuttonview}>
       <Button style = {styles.safebrowserbutton} >
         <Globe size={14} color={theme.fontcolor.defaultblack} />
-      <Text style = {styles.safebuttontext}>  보안 브라우저로 다시 열기</Text>
+      <Text style = {styles.safebuttontext} onPress={() => router.push(`/WebViewScreen?url=${encodeURIComponent(record.url)}`)}>  보안 브라우저로 다시 열기</Text>
     </Button>
     </View>
   )}
