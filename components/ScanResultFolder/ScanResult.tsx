@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { Brain, GraduationCap, Shield, User } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
@@ -11,8 +12,8 @@ import { addScanRecord, ScanRecord } from "../../data/scanRecords";
 import { XAI_EXPLANATIONS } from "../../data/xaiTexts";
 import { getScanMeta } from "../../util/scanMeta";
 import { loadScanRecords, saveScanRecords } from "../../util/storage";
+import { AnalyzeResult, analyzeUrl } from "../../util/urlAnaylze";
 import { Card } from "../ui/card";
-import { WebViewModal } from "../WebView/WebView";
 import { styles } from "./styles";
 
 interface ScanResultProps {
@@ -22,63 +23,65 @@ interface ScanResultProps {
 
 
 
-
 export function ScanResult({ url, onBack }: ScanResultProps) {
+  const [result, setResult] = useState<AnalyzeResult | null>(null);
   const [showRedirects, setShowRedirects] = useState(false);
   const [copied, setCopied] = useState(false);
-  type ExplanationLevel = "beginner" | "intermediate" | "expert";
-  const [explanationLevel, setExplanationLevel] = useState<ExplanationLevel>("beginner");
-  const [isWebViewOpen, setIsWebViewOpen] = useState(false);
 
-  const analyzeUrl = (url: string): { status: Status; message: string } => {
-  if (url.includes("g00gle") || url.includes("suspicious")) {
-    return { status: "malicious", message: "위험한 사이트에요" };
-  }
-  if (url.includes("bit.ly")) {
-    return { status: "suspicious", message: "주의가 필요해요" };
-  }
-  return { status: "safe", message: "안전한 사이트에요" };
-};
+  type ExplanationLevel = "beginner" | "intermediate" | "expert";
+  const [explanationLevel, setExplanationLevel] =
+    useState<ExplanationLevel>("beginner");
+
+  const router = useRouter();
 
   type Status = ScanRecord["status"];
 
-  const result = analyzeUrl(url);
-  const status: Status = result.status;
-  const handleSave = async () => {
-  const existing = await loadScanRecords();
-
-  const updated = addScanRecord(existing, {
-    url,
-    status,
-    ...getScanMeta(),
-    riskScore: 10,
-  });
-
-  await saveScanRecords(updated);
-
-  console.log("저장 완료", updated);
-};
-  console.log(url);
-
+  // ✅ 1. URL 분석
   useEffect(() => {
-  handleSave();
-}, []);
+    const runAnalysis = async () => {
+      const res = await analyzeUrl(url);
+      setResult(res);
+    };
+
+    runAnalysis();
+  }, [url]);
+
+  // ✅ 2. 저장
+  useEffect(() => {
+    if (!result) return;
+
+    const handleSave = async () => {
+      const existing = await loadScanRecords();
+
+      const updated = addScanRecord(existing, {
+        url,
+        status: result.status,
+        ...getScanMeta(),
+        riskScore: result.riskScore, // 🔥 중요
+      });
+
+      await saveScanRecords(updated);
+      console.log("저장 완료");
+    };
+
+    handleSave();
+  }, [result]);
+
+  // ✅ 로딩 처리 (필수)
+  if (!result) {
+    return (
+      <View style={styles.container}>
+        <Text>분석 중...</Text>
+      </View>
+    );
+  }
   const handleCopy = () => {
     // RN에서는 Clipboard 따로 필요
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
-  
-
-  const getXAIExplanation = (status: Status, level: ExplanationLevel) => {
-    
-  return XAI_EXPLANATIONS[status][level];
-  
-};
-
-
-
-  const currentExplanation = getXAIExplanation(result.status, explanationLevel);
+  // ✅ 안전하게 사용
+  const currentExplanation = XAI_EXPLANATIONS[result.status][explanationLevel];
 
   return (
     
@@ -121,13 +124,15 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
 
         {/* 안전할 때만 */}
         {result.status === "safe" && (
-          <TouchableOpacity
-            style={styles.primaryBtn}
-            onPress={() => setIsWebViewOpen(true)}
-          >
-            <Text style={{ color: "#fff" }}>보안 브라우저로 열기</Text>
-          </TouchableOpacity>
-        )}
+  <TouchableOpacity
+    style={styles.primaryBtn}
+    onPress={() => {
+      router.push(`/WebViewScreen?url=${encodeURIComponent(url)}`);
+    }}
+  >
+    <Text style={{ color: "#fff" }}>보안 브라우저로 열기</Text>
+  </TouchableOpacity>
+)}
 
         {/* 위험 */}
         {result.status !== "safe" && (
@@ -240,12 +245,7 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
         
       </ScrollView>
 
-      {/* WebView */}
-      <WebViewModal
-        url={url}
-        isOpen={isWebViewOpen}
-        onClose={() => setIsWebViewOpen(false)}
-      />
+
     </View>
   );
 }
