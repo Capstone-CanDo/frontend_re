@@ -1,6 +1,14 @@
 # frontend_re
 expo 기반으로 다시 만든 프엔 레포
 
+## 0330 환경가이드
+app.json 에 react-native-vision-camera가 아직 안지워져서 확인 부탁드립니다.
+
+rd /s /q node_modules<br>
+del package-lock.json<br>
+npm install<br>
+npx expo start -c
+
 ## 0326 진행상황 & 환경가이드
 일단 스캔 결과 화면 적당히 만들어뒀습니다.
 앱 기동에 필요한 다른 자잘한 코드들 넣어뒀습니다.
