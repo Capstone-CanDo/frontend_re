@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { theme } from "../../constants/index";
 import { ScanRecord } from "../../data/scanRecords";
-import { loadScanRecords } from "../../util/storage";
+import { clearScanRecords, loadScanRecords } from "../../util/storage";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
@@ -139,12 +139,24 @@ useFocusEffect(
     위험
   </Button>
 
+
+
   <Button
     variant={filterStatus === "suspicious" ? "default" : "outline"}
     onPress={() => setFilterStatus("suspicious")}
     style={[filterStatus === "suspicious" && styles.warningActive, { paddingHorizontal: 13, paddingVertical: 6 }]}
   >
     주의
+  </Button>
+
+    <Button
+    onPress={async () => {
+    await clearScanRecords();
+    console.log("초기화 완료");
+  }}
+    style={[filterStatus === "malicious" && styles.dangerActive, { paddingHorizontal: 13, paddingVertical: 6 }]}
+  >
+    삭제
   </Button>
 </View>
 
@@ -190,7 +202,7 @@ useFocusEffect(
           </View>
           {record.status === "safe" && (
     <View style={styles.safebrowserbuttonview}>
-      <Button style = {styles.safebrowserbutton} onPress={() => router.push(`/ScanResultScreen?url=${encodeURIComponent(record.url)}`)}>
+      <Button style = {styles.safebrowserbutton} >
         <Globe size={14} color={theme.fontcolor.defaultblack} />
       <Text style = {styles.safebuttontext}>  보안 브라우저로 다시 열기</Text>
     </Button>

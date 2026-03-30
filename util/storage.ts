@@ -22,3 +22,9 @@ export const loadScanRecords = async (): Promise<ScanRecord[]> => {
     return [];
   }
 };
+
+//데이터 삭제 용
+export const clearScanRecords = async () => {
+  await AsyncStorage.removeItem(STORAGE_KEY);
+  console.log("모든 스캔 기록 삭제됨");
+};
