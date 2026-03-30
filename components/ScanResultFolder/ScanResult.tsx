@@ -1,5 +1,5 @@
 import { Brain, GraduationCap, Shield, User } from "lucide-react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   Text,
@@ -7,15 +7,20 @@ import {
   View
 } from "react-native";
 import { Button } from "../../components/ui/button";
+import { addScanRecord, ScanRecord } from "../../data/scanRecords";
 import { XAI_EXPLANATIONS } from "../../data/xaiTexts";
+import { getScanMeta } from "../../util/scanMeta";
+import { loadScanRecords, saveScanRecords } from "../../util/storage";
+import { Card } from "../ui/card";
 import { WebViewModal } from "../WebView/WebView";
 import { styles } from "./styles";
-
 
 interface ScanResultProps {
   url: string;
   onBack: () => void;
 }
+
+
 
 
 export function ScanResult({ url, onBack }: ScanResultProps) {
@@ -35,26 +40,48 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
   return { status: "safe", message: "안전한 사이트에요" };
 };
 
-  type Status = "safe" | "suspicious" | "malicious";
+  type Status = ScanRecord["status"];
 
   const result = analyzeUrl(url);
-  
+  const status: Status = result.status;
+  const handleSave = async () => {
+  const existing = await loadScanRecords();
+
+  const updated = addScanRecord(existing, {
+    url,
+    status,
+    ...getScanMeta(),
+    riskScore: 10,
+  });
+
+  await saveScanRecords(updated);
+
+  console.log("저장 완료", updated);
+};
+  console.log(url);
+
+  useEffect(() => {
+  handleSave();
+}, []);
   const handleCopy = () => {
     // RN에서는 Clipboard 따로 필요
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
   
+
   const getXAIExplanation = (status: Status, level: ExplanationLevel) => {
-    console.log("status:", status);
-console.log("level:", level);
+    
   return XAI_EXPLANATIONS[status][level];
   
 };
-console.log("data:", XAI_EXPLANATIONS);
+
+
+
   const currentExplanation = getXAIExplanation(result.status, explanationLevel);
 
   return (
+    
     <View style={styles.container}>
       {/* 헤더 */}
       <View style={styles.header}>
@@ -69,6 +96,8 @@ console.log("data:", XAI_EXPLANATIONS);
         <View style={styles.card}>
           <Text style={styles.statusText}>{result.message}</Text>
         </View>
+
+        <Card><Text>{url}</Text></Card>
 
         {/* 버튼 */}
         <TouchableOpacity

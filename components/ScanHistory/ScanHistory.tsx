@@ -1,9 +1,10 @@
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { Globe, MapPin, QrCode, Search, TrendingDown, TrendingUp } from "lucide-react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { theme } from "../../constants/index";
-import { scanRecords } from "../../data/scanRecords";
+import { ScanRecord } from "../../data/scanRecords";
+import { loadScanRecords } from "../../util/storage";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
@@ -17,7 +18,19 @@ export function ScanHistory() {
   const [searchQuery, setSearchQuery] = useState("");
    const [filterStatus, setFilterStatus] = useState<"all" | "safe" | "malicious" | "suspicious">("all");
   const router = useRouter();
-  const [records, setRecords] = useState(scanRecords);
+  const [records, setRecords] = useState<ScanRecord[]>([]);
+
+useFocusEffect(
+  useCallback(() => {
+    const fetchData = async () => {
+      const data = await loadScanRecords();
+      console.log("불러온 데이터:", data);
+      setRecords(data);
+    };
+
+    fetchData();
+  }, [])
+);
 
   const filteredRecords = records.filter((record) => {
   const matchesSearch =

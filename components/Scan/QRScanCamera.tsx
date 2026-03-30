@@ -1,14 +1,18 @@
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { ScanLine } from "lucide-react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Linking, StyleSheet, Text, View } from "react-native";
 import { Button } from "../ui/button";
 import { styles } from "./camerastyle";
 
 export default function QRScannerScreen() {
   console.log("QRScannerScreen 렌더링됨");
-
+  useFocusEffect(
+  useCallback(() => {
+    setScanned(false);
+  }, [])
+);
   const [permission, requestPermission] = useCameraPermissions();
   const router = useRouter();
   const [scanned, setScanned] = useState(false);

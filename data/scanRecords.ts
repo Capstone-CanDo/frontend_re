@@ -8,6 +8,22 @@ export interface ScanRecord {
   riskScore: number;
 }
 
+
+export function addScanRecord(
+  records: ScanRecord[],
+  newRecord: Omit<ScanRecord, "id">
+): ScanRecord[] {
+  const nextId =
+    records.length > 0 ? records[records.length - 1].id + 1 : 1;
+
+  const recordWithId: ScanRecord = {
+    id: nextId,
+    ...newRecord,
+  };
+
+  return [recordWithId, ...records]; // 최신이 위로 오게
+}
+
 export const scanRecords: ScanRecord[] = [
     {
       id: 1,
