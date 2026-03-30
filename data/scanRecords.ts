@@ -13,15 +13,12 @@ export function addScanRecord(
   records: ScanRecord[],
   newRecord: Omit<ScanRecord, "id">
 ): ScanRecord[] {
-  const nextId =
-    records.length > 0 ? records[records.length - 1].id + 1 : 1;
-
   const recordWithId: ScanRecord = {
-    id: nextId,
+    id: Date.now(), // 🔥 핵심
     ...newRecord,
   };
 
-  return [recordWithId, ...records]; // 최신이 위로 오게
+  return [recordWithId, ...records];
 }
 
 export const scanRecords: ScanRecord[] = [
