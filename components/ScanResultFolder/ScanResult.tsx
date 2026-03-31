@@ -38,13 +38,16 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
 
   // ✅ 1. URL 분석
   useEffect(() => {
-    const runAnalysis = async () => {
+    const fetchResult = async () => {
       const res = await analyzeUrl(url);
       setResult(res);
+      console.log("분석 결과:", res);         // ✅ 여기서 찍으면 안전
+    console.log("상태:", res.status);      // ✅ 안전하게 status 출력
     };
-
-    runAnalysis();
+    fetchResult();
   }, [url]);
+
+ 
 
   // ✅ 2. 저장
   useEffect(() => {
@@ -81,7 +84,10 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
     setTimeout(() => setCopied(false), 2000);
   };
   // ✅ 안전하게 사용
-  const currentExplanation = XAI_EXPLANATIONS[result.status][explanationLevel];
+  const currentExplanation =
+  result.status && XAI_EXPLANATIONS[result.status]
+    ? XAI_EXPLANATIONS[result.status][explanationLevel]
+    : { title: "정보 없음", points: [], advice: "" };
 
   return (
     

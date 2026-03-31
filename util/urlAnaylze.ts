@@ -9,26 +9,26 @@ export interface AnalyzeResult {
 }
 
 export const analyzeUrl = async (url: string): Promise<AnalyzeResult> => {
-  // 임시 로직 (나중에 API로 교체)
-  if (url.includes("g00gle") || url.includes("suspicious")) {
-    return {
-      status: "malicious",
-      message: "위험한 사이트에요",
-      riskScore: 10, // ✅ 고정값
-    };
-  }
+  try {
+    const res = await fetch("http://10.240.68.7:8000/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url }),
+    });
+    const data = await res.json();
+    console.log("서버 응답 확인:", data); // 🔥 추가
 
-  if (url.includes("bit.ly")) {
+    return {
+      status: data.status || "suspicious",
+      riskScore: data.riskScore ?? 0,
+      message: data.message || "분석 실패, 안전 처리",
+    };
+  } catch (err: any) {
+    console.error("analyzeUrl 에러:", err);
     return {
       status: "suspicious",
-      message: "주의가 필요해요",
-      riskScore: 10,
+      riskScore: 0,
+      message: "분석 실패, 안전 처리",
     };
   }
-
-  return {
-    status: "safe",
-    message: "안전한 사이트에요",
-    riskScore: 10,
-  };
 };
