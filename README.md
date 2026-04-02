@@ -2,6 +2,17 @@
 
 expo 기반으로 다시 만든 프엔 레포
 
+## 0402 진행상황
+
+현재 scanresult와 scanhistory가 BE 연동과 구조가 맞지 않는것을 수정했습니다. 현재 UI상 작동을 확인하기 위해 JSON을 위한 코드는 주석처리되어 있고, 하드코딩된 데이터가 대신 동작하고 있습니다.
+
+<img width="340" height="770" alt="image" src="https://github.com/user-attachments/assets/ed49638e-86eb-443c-b37b-7e365d2bf92d" />
+<img width="340" height="770" alt="image" src="https://github.com/user-attachments/assets/40ab5003-47ac-4c35-8a1a-ef888b181a81" />
+
+
+
+추후 UI 수정을 하도록 하겠습니다
+
 ## 0330 진행상황\&환경가이드
 
 app.json 에 react-native-vision-camera가 아직 안지워져서 확인 부탁드립니다.
