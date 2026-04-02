@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import QRScannerScreen from "../../../components/Scan/QRScanCamera";
 
-export default function HistoryScreen() {
+export default function ScancameraScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>스캔 목록 화면</Text>
-    </View>
+          <QRScannerScreen />
+        </View>
   );
 }
 

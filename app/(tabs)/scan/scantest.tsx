@@ -1,6 +1,6 @@
 import React from "react";
 import { Alert } from "react-native";
-import QRScanner from "../../components/QRScannerProps";
+import QRScanner from "../../../components/Scan/QRScannerProps";
 
 export default function ScanScreen() {
 
