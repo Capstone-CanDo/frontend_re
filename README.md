@@ -6,16 +6,11 @@ expo 기반으로 다시 만든 프엔 레포
 
 현재 로그인 기능 구현중입니다. 프로토타입에서 유효 이메일/비밀번호 확인하기 & 자동 로그인과 로그아웃 기능 구현했습니다. 그런데 환경 관련해서 좀 손볼게 남아서 나중에 설정 관련해서 완료되면 알려드리겠습니다
 
+miragejs 사용해서 백엔드 연동 전에 한 번 로직 확인 예정입니다.  
+
 npx expo install expo-secure-store<br>필요합니다.
-rd /s /q node\_modules<br>
-del package-lock.json<br>
-npm install<br>
-npx expo start -c<br>
-부탁드립니다.
 
-아래는 설정 관련해서 제가 겪은 일입니다. 만약 위의 명령어 선에서 해결되었다면 아래의 내용은 무시해주세요.
-
-<img width="240" height="180" alt="image" src="https://github.com/user-attachments/assets/83d7117f-937d-45a1-9819-93f0834abcf4" />
+<img width="240" height="180" alt="image" src="https://github.com/user-attachments/assets/83d7117f-937d-45a1-9819-93f0834abcf4" /><br>
 expo 실행하는 방법에 이렇게 두 앱이 있잖아요. 그리고 npx expo start 실행하면 왼쪽 앱으로 실행되고요. 저는 왼쪽 앱 지웠다 다시 설치하니까 되더라고요. 오른쪽 앱은 돌아가지 않고요. 일단 Expo Go에서 되는지 한 번 확인하고 알려드릴게요.
 
 
