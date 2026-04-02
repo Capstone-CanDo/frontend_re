@@ -11,7 +11,6 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        
         <Stack.Screen name="scancamera" options={{ headerShown: false }} />
         <Stack.Screen name="scantest" options={{ headerShown: false }} />
       </Stack>

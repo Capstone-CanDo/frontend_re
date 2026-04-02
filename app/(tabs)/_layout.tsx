@@ -41,7 +41,7 @@ export default function TabLayout() {
           tabBarButton: () => (
             <TouchableOpacity
               style={styles.scanButton}
-              onPress={() => router.navigate("/(tabs)/scan")}
+              onPress={() => router.navigate("/scan")}
             >
               <Ionicons name="scan" size={28} color="white" />
             </TouchableOpacity>
