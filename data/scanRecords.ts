@@ -1,79 +1,112 @@
+// scanRecords.ts
 export interface ScanRecord {
   id: number;
   url: string;
   status: "safe" | "malicious" | "suspicious";
-  date: string;
-  time: string;
-  location: string;
-  riskScore: number;
+  created_at: string;
+  is_phishing: "True" | "False";
+  explanation: string | null;
+  travel: number;
+  location?: string;
 }
 
-
+// 기존 addScanRecord는 FE 상태용
 export function addScanRecord(
   records: ScanRecord[],
   newRecord: Omit<ScanRecord, "id">
 ): ScanRecord[] {
   const recordWithId: ScanRecord = {
-    id: Date.now(), // 🔥 핵심
+    id: Date.now(),
     ...newRecord,
   };
 
   return [recordWithId, ...records];
 }
 
+// 백엔드 전송 함수
+export async function sendScanRecordToBackend(record: ScanRecord, token: string) {
+  try {
+    const response = await fetch("https://your-backend.com/scan-records", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(record),
+    });
+
+    const data = await response.json();
+    console.log("백엔드 응답:", data);
+    return data;
+  } catch (error) {
+    console.error("백엔드 전송 실패:", error);
+  }
+}
+
+// 통합: FE 상태 추가 + 백엔드 전송
+export async function addAndSendScanRecord(
+  records: ScanRecord[],
+  newRecord: Omit<ScanRecord, "id">,
+  token: string
+): Promise<ScanRecord[]> {
+  const recordWithId: ScanRecord = {
+    id: Date.now(),
+    ...newRecord,
+  };
+
+  const updatedRecords = [recordWithId, ...records];
+
+  try {
+    await sendScanRecordToBackend(recordWithId, token);
+  } catch (error) {
+    console.error("백엔드 전송 실패:", error);
+  }
+
+  return updatedRecords;
+}
+
+
+//하드코딩용 함수
+
 export const scanRecords: ScanRecord[] = [
-    {
-      id: 1,
-      url: "https://restaurant-menu.com/special",
-      status: "safe",
-      date: "2026-03-05",
-      time: "14:30",
-      location: "도쿄 신주쿠",
-      riskScore: 5,
-    },
-    {
-      id: 2,
-      url: "https://g00gle-login-verify.suspicious.xyz",
-      status: "malicious",
-      date: "2026-03-05",
-      time: "10:15",
-      location: "도쿄 시부야",
-      riskScore: 87,
-    },
-    {
-      id: 3,
-      url: "https://bit.ly/hotel-promo",
-      status: "suspicious",
-      date: "2026-03-04",
-      time: "18:45",
-      location: "도쿄 아키하바라",
-      riskScore: 45,
-    },
-    {
-      id: 4,
-      url: "https://museum-tickets.jp/buy",
-      status: "safe",
-      date: "2026-03-04",
-      time: "11:20",
-      location: "도쿄 우에노",
-      riskScore: 8,
-    },
-    {
-      id: 5,
-      url: "https://free-wifi-login.net/connect",
-      status: "malicious",
-      date: "2026-03-03",
-      time: "16:00",
-      location: "도쿄 하라주쿠",
-      riskScore: 92,
-    },
-    {
-      id: 6,
-      url: "https://official-store.co.jp/sale",
-      status: "safe",
-      date: "2026-03-03",
-      time: "13:30",
-      location: "도쿄 긴자",
-      riskScore: 3,
-    },
-  ];
+  {
+    id: 1,
+    url: "https://www.kmooc.kr/",
+    status: "safe",
+    created_at: "2026-04-02T15:25:55.335467+09:00",
+    is_phishing: "False",
+    explanation: null,
+    travel: 1,
+    location: "Seoul, Korea",
+  },
+  {
+    id: 2,
+    url: "https://cyber.ewha.ac.kr/mod/ubboard/view.php?id=2682513",
+    status: "safe",
+    created_at: "2026-04-02T15:36:59.675973+09:00",
+    is_phishing: "False",
+    explanation: null,
+    travel: 1,
+    location: "Seoul, Korea",
+  },
+  {
+    id: 3,
+    url: "http://malicious.example.com/phish",
+    status: "malicious",
+    created_at: "2026-04-02T16:00:00.000000+09:00",
+    is_phishing: "True",
+    explanation: "의심스러운 피싱 사이트",
+    travel: 0,
+    location: "Busan, Korea",
+  },
+  {
+    id: 4,
+    url: "http://suspicious.example.com",
+    status: "suspicious",
+    created_at: "2026-04-02T16:15:00.000000+09:00",
+    is_phishing: "False",
+    explanation: "의심 URL",
+    travel: 0,
+    location: "Incheon, Korea",
+  },
+];
