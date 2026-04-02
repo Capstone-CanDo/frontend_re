@@ -8,13 +8,11 @@ import {
   View
 } from "react-native";
 import { Button } from "../../components/ui/button";
-import { addScanRecord, ScanRecord } from "../../data/scanRecords";
 import { XAI_EXPLANATIONS } from "../../data/xaiTexts";
-import { getScanMeta } from "../../util/scanMeta";
-import { loadScanRecords, saveScanRecords } from "../../util/storage";
 import { AnalyzeResult, analyzeUrl } from "../../util/urlAnaylze";
 import { Card } from "../ui/card";
 import { styles } from "./styles";
+
 
 interface ScanResultProps {
   url: string;
@@ -34,39 +32,45 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
 
   const router = useRouter();
 
-  type Status = ScanRecord["status"];
+  
+useEffect(() => {
+  const fetchResult = async () => {
+    const res = await analyzeUrl(url); // 토큰 인자 생략
+    setResult(res);
+    console.log("서버 응답:", res);
+  };
 
+  fetchResult();
+}, [url]);
+/*
   // ✅ 1. URL 분석
   useEffect(() => {
-    const runAnalysis = async () => {
-      const res = await analyzeUrl(url);
-      setResult(res);
+    const fetchResult = async () => {
+      try {
+        const token = await SecureStore.getItemAsync("jwt_token"); // SecureStore에서 JWT 꺼내기
+        if (!token) throw new Error("토큰이 없습니다");
+
+        const res = await analyzeUrl(url, token);
+        setResult(res);
+        console.log("서버 응답:", res);
+      } catch (e) {
+        console.error(e);
+      }
     };
 
-    runAnalysis();
+    fetchResult();
   }, [url]);
+*/
+  type Status = "safe" | "malicious";
+// status 변환 함수 추가
+const convertStatus = (is_phishing: boolean): Status => {
+  return is_phishing ? "malicious" : "safe";
+};
 
-  // ✅ 2. 저장
-  useEffect(() => {
-    if (!result) return;
+// useEffect 후 상태 변환
+const status = result ? convertStatus(result.is_phishing) : "safe";
 
-    const handleSave = async () => {
-      const existing = await loadScanRecords();
-
-      const updated = addScanRecord(existing, {
-        url,
-        status: result.status,
-        ...getScanMeta(),
-        riskScore: result.riskScore, // 🔥 중요
-      });
-
-      await saveScanRecords(updated);
-      console.log("저장 완료");
-    };
-
-    handleSave();
-  }, [result]);
-
+ 
   // ✅ 로딩 처리 (필수)
   if (!result) {
     return (
@@ -81,7 +85,10 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
     setTimeout(() => setCopied(false), 2000);
   };
   // ✅ 안전하게 사용
-  const currentExplanation = XAI_EXPLANATIONS[result.status][explanationLevel];
+  const currentExplanation =
+  status && XAI_EXPLANATIONS[status]
+    ? XAI_EXPLANATIONS[status][explanationLevel]
+    : { title: "정보 없음", points: [], advice: "" };
 
   return (
     
@@ -123,7 +130,7 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
         )}
 
         {/* 안전할 때만 */}
-        {result.status === "safe" && (
+        {status === "safe" && (
   <TouchableOpacity
     style={styles.primaryBtn}
     onPress={() => {
@@ -135,7 +142,7 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
 )}
 
         {/* 위험 */}
-        {result.status !== "safe" && (
+        {status !== "safe" && (
           <View style={styles.warning}>
             <Text style={{ color: "red" }}>
               ⚠️ 위험할 수 있습니다
@@ -233,9 +240,8 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
       {/* 조언 */}
       <View style={[
         styles.adviceBox,
-        result.status === "safe" && styles.safe,
-        result.status === "suspicious" && styles.suspicious,
-        result.status === "malicious" && styles.danger,
+        status === "safe" && styles.safe,
+        status === "malicious" && styles.danger,
       ]}>
         <Text style={styles.adviceText}>
           💡 {currentExplanation.advice}
