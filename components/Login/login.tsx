@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { Eye, EyeOff, Lock, Mail, MapPin, Shield } from "lucide-react-native";
 import { useState } from "react";
 import {
@@ -5,11 +6,13 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
+import { useAuth } from "../../context/AuthContext";
 import { validateLogin } from "../../util/auth";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Input } from "../ui/input";
 import { styles } from "./style";
+
 
 
 interface LoginProps {
@@ -22,15 +25,19 @@ export function Login({ onLogin }: LoginProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({ email: "", password: "" });
-  
+  const router = useRouter();
+  const { signIn } = useAuth();
 
-  const handleLogin = () => {
+
+  const handleLogin = async () => {
     const newErrors = validateLogin({ email, password });
 
   setErrors(newErrors);
 
   if (!newErrors.email && !newErrors.password) {
-    onLogin();
+    console.log("로그인 버튼");
+    await signIn(email, password);
+    router.replace("/(tabs)");
   }
   };
 

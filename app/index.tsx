@@ -1,9 +1,13 @@
+import { useAuth } from "@/context/AuthContext";
 import { Redirect } from "expo-router";
 
 export default function Index() {
-  const isLoggedIn = false; // 나중에 context로 변경
+  const { user, isLoading } = useAuth();
 
-  if (isLoggedIn) {
+  // 🔥 로딩 중이면 아무것도 안 보여줌 (중요)
+  if (isLoading) return null;
+
+  if (user) {
     return <Redirect href="/(tabs)" />;
   }
 
