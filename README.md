@@ -1,27 +1,31 @@
-# frontend\_re
+# frontend_re
 
 expo 기반으로 다시 만든 프엔 레포
+
+## 0404 진행상황\&환경가이드
+
+웹뷰 js off 된 상태에서는
+스크롤 가능, 터치 불가능, 사진 로딩 안됨
+'자세히 보기' 버튼 누르면 js on 됩니다 (버튼 문구는 다른 거로 바꿀 예정)
+
+바텀시트는 아직 모달만 만들었습니다. 터치하면 잘 올라갔다 내려갔다 하는 것 같아용...
 
 ## 0330 진행상황\&환경가이드
 
 app.json 에 react-native-vision-camera가 아직 안지워져서 확인 부탁드립니다.
 
-rd /s /q node\_modules
+rd /s /q node_modules
 del package-lock.json
 npm install
 npx expo start -c
-
-
 
 추가로
 npx expo install @react-native-async-storage/async-storage
 확인 부탁드립니다.
 
-
-
 1. 카메라 화면에서 QR 스캔 하면 그 결과를 저장하는 로직을 추가했습니다. url, 위험 단계, 날짜, 시간이 저장됩니다. 아직 위치와 위험도는 임의로 정해진 값으로 들어갑니다.
 
-util 폴더 
+util 폴더
 scanMeta: url, 위험 단계, 날짜, 시간 받아주는 코드입니다. 추후 장소 정보 저장도 추가해야 합니다.
 storage: AsyncStorage를 이용해서 url 스캔 로그 저장하고 불러오고 기록 삭제하는 코드
 
@@ -96,4 +100,3 @@ app 폴더는 원래 있던 내용 제거하고 깃허브 코드로 교체.
 component 폴더에 있는 내용은 원래 있던 내용에 추가.
 
 초기 코드, asset은 정리할 예정이지만 지금은 없애면 오류남
-
