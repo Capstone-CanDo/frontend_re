@@ -36,15 +36,22 @@ export function ScanHistory() {
   );
 
   // 필터링
-  const filteredRecords = records.filter((record) => {
+  const filteredRecords = records
+  .filter((record) => {
     const matchesSearch =
       record.url.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (record.location?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false);
 
-    const matchesFilter = filterStatus === "all" ? true : record.status === filterStatus;
+    const matchesFilter =
+      filterStatus === "all" ? true : record.status === filterStatus;
 
     return matchesSearch && matchesFilter;
-  });
+  })
+  .sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() -
+      new Date(a.created_at).getTime()
+  );
 
   const stats = {
     total: records.length,
