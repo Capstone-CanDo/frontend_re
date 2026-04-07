@@ -55,8 +55,13 @@ export async function fetchScanRecords(token: string) {
 
     const data = await response.json();
     console.log("📡 GET 응답:", data);
+    // is_phishing 기반으로 status 추가
+    const mappedData: ScanRecord[] = data.map((item: any) => ({
+      ...item,
+      status: item.is_phishing === "True" ? "malicious" : "safe",
+    }));
 
-    return data;
+    return mappedData;
   } catch (error) {
     console.error("❌ GET 실패:", error);
     return [];
