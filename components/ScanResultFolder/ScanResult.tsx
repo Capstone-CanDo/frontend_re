@@ -1,8 +1,10 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { Brain, GraduationCap, Shield, User } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
+  Image,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -11,10 +13,7 @@ import {
 import { Button } from "../../components/ui/button";
 import { XAI_EXPLANATIONS } from "../../data/xaiTexts";
 import { AnalyzeResult, analyzeUrl } from "../../util/urlAnaylze";
-import { Card } from "../ui/card";
 import { styles } from "./styles";
-
-
 
 interface ScanResultProps {
   url: string;
@@ -88,16 +87,49 @@ if (!result) return <Text>분석중...</Text>;
         <TouchableOpacity onPress={onBack}>
           <Text style={styles.back}>←</Text>
         </TouchableOpacity>
-        <Text style={styles.title}>큐트캡</Text>
+        <Image
+      source={require("../../assets/images/Qtravel_logo.png")}
+     style={styles.logo} // 스타일로 크기 조절 가능
+     resizeMode="contain" // 이미지 비율 유지
+  />
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* 상태 */}
-        <View style={styles.card}>
-          <Text style={styles.statusText}>{result.message}</Text>
-        </View>
+        <View
+  style={[
+    styles.statusCard,
+    status === "safe" && styles.safeCard,
+    status === "malicious" && styles.maliciousCard,
+  ]}
+>
+  <View style={[styles.iconWrapper,
+    status === "safe" && styles.safeiconWrapper,
+    status === "malicious" && styles.maliciousiconWrapper,
+  ]}>
+        <Ionicons
+           name="link-outline"
+           size={20}
+           color={
+            status === "safe"
+            ? "#008236"
+           : status === "malicious"
+            ? "#C10007"
+            : "#999" // optional (suspicious 등)
+  }
+/>
+      </View>
+  <Text
+    style={[
+      styles.statusText,
+      status === "safe" && styles.safeText,
+      status === "malicious" && styles.maliciousText,
+    ]}
+  >
+    {result.message}
+  </Text>
+</View>
 
-        <Card><Text>{url}</Text></Card>
 
         {/* 버튼 */}
         <TouchableOpacity
@@ -107,10 +139,6 @@ if (!result) return <Text>분석중...</Text>;
           <Text>URL 결과 보기</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={handleCopy}>
-          <Text>{copied ? "복사됨!" : "URL 복사"}</Text>
-        </TouchableOpacity>
-
         {/* 리다이렉션 */}
         {showRedirects && (
           <View style={styles.card}>
@@ -118,6 +146,12 @@ if (!result) return <Text>분석중...</Text>;
             <Text>{url}</Text>
           </View>
         )}
+
+        <TouchableOpacity style={styles.button} onPress={handleCopy}>
+          <Text>{copied ? "복사됨!" : "URL 복사"}</Text>
+        </TouchableOpacity>
+
+        
 
         {/* 안전할 때만 */}
         {status === "safe" && (
@@ -140,10 +174,10 @@ if (!result) return <Text>분석중...</Text>;
           </View>
         )}
 
-        <View style={styles.card}>
-      
+
+      <View style = {styles.xaicontainer}>
       {/* 헤더 */}
-      <View style={styles.header}>
+      <View style={styles.xaiheader}>
         <View style={styles.headerLeft}>
           <Brain size={18} color="#2563eb" />
           <Text style={styles.title}>AI 판단 근거</Text>
@@ -226,7 +260,7 @@ if (!result) return <Text>분석중...</Text>;
           </Text>
         ))}
       </View>
-
+        </View>
       {/* 조언 */}
       <View style={[
         styles.adviceBox,
@@ -236,7 +270,7 @@ if (!result) return <Text>분석중...</Text>;
         <Text style={styles.adviceText}>
           💡 {currentExplanation.advice}
         </Text>
-      </View>
+
     </View>
         
       </ScrollView>
