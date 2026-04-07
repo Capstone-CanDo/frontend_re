@@ -6,6 +6,8 @@ expo 기반으로 다시 만든 프엔 레포
 
 - 🐞 ERROR  Text strings must be rendered within a <Text> component. -> SafeAreaProvider 때문에 일어나는 오류입니다. 텍스트 필드 때문이 아닙니다. 이거 저도 어떻게 고쳐야 할지 모르겠습니다... 나중에 고칠테니 무시해주세요.
 - 🐞 스캔 기록 상태가 제대로 인식되지 않는 버그를 수정했습니다.
+- 🐞 스캔 기록을 최근 기록을 위에 보여주도록 수정했습니다.
+- 🐞 components\ScanHistory\ScanHistory.tsx에 const data = await loadScanRecords(); 부분 오류표시를 할 것입니다. 아직 AsyncStorage상에 데이터가 없어서 오류 표시 하는 것인데 데이터가 없는 상태에서도 동작하고 서버에서 데이터 가져오면 해결되는 문제라서 일단 무시해주세요.
 - 🎨 스캔 결과 UI를 수정했습니다. 추후 더 수정할 예정입니다.
   - 일단 ppt에 예전 로고 쓰길래 일단 스캔 결과에도 올려놨습니다.
   - 피그마 프로토타입이랑 UI를 맞췄는데 아직 리다이렉션 부분과 아이콘 추가를 안했습니다.
