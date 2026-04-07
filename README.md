@@ -2,6 +2,20 @@
 
 expo 기반으로 다시 만든 프엔 레포
 
+## 0407 진행상황
+
+- 🐞 ERROR  Text strings must be rendered within a <Text> component. -> SafeAreaProvider 때문에 일어나는 오류입니다. 텍스트 필드 때문이 아닙니다. 이거 저도 어떻게 고쳐야 할지 모르겠습니다... 나중에 고칠테니 무시해주세요.
+- 🐞 스캔 기록 상태가 제대로 인식되지 않는 버그를 수정했습니다.
+- 🎨 스캔 결과 UI를 수정했습니다. 추후 더 수정할 예정입니다.
+  - 일단 ppt에 예전 로고 쓰길래 일단 스캔 결과에도 올려놨습니다.
+  - 피그마 프로토타입이랑 UI를 맞췄는데 아직 리다이렉션 부분과 아이콘 추가를 안했습니다.
+  - AI 판단 근거 버튼 안에 정렬이 이상하게 되는 문제가 있습니다.
+
+<img width="340" height="770" alt="image" src="https://github.com/user-attachments/assets/832d64e2-7408-4f2a-b731-27400514b148" />
+<img width="340" height="770" alt="image" src="https://github.com/user-attachments/assets/6de6676a-db25-43ba-9220-af0997f2b4d8" />
+
+
+
 ## 0406 진행상황 & 환경가이드
 
 현재 BE 연동을 위한 로그인, 스캔 결과 연동과 스캔 기록 연동을 구현했습니다.
