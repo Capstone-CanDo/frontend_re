@@ -3,20 +3,21 @@ import { Globe, MapPin, QrCode, Search, TrendingDown, TrendingUp } from "lucide-
 import React, { useCallback, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { theme } from "../../constants/index";
-import { ScanRecord, addAndSendScanRecord, scanRecords } from "../../data/scanRecords";
-//import { loadScanRecords } from "../../util/storage";
+import { ScanRecord } from "../../data/scanRecords";
+import { loadScanRecords } from "../../util/storage";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Input } from "../ui/input";
 import { styles } from "./styles";
 
-// JWT 토큰 가져오기 예시
-async function getAccessToken(): Promise<string> {
-  return "YOUR_JWT_ACCESS_TOKEN";
-}
+
+
 
 export function ScanHistory() {
+// JWT 토큰 가져오기 예시
+
+
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "safe" | "malicious" | "suspicious">("all");
   const router = useRouter();
@@ -26,8 +27,7 @@ export function ScanHistory() {
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
-        //const data = await loadScanRecords();
-        const data = await scanRecords;
+        const data = await loadScanRecords();
         console.log("불러온 데이터:", data);
         setRecords(data);
       };
@@ -58,12 +58,6 @@ export function ScanHistory() {
     return <Badge variant="secondary">주의</Badge>;
   };
 
-  // 새 스캔 기록 추가
-  const handleAddScan = async (newRecord: Omit<ScanRecord, "id">) => {
-    const token = await getAccessToken();
-    const updatedRecords = await addAndSendScanRecord(records, newRecord, token);
-    setRecords(updatedRecords);
-  };
 
   return (
     <View style={styles.container}>
