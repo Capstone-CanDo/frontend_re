@@ -59,7 +59,7 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
   type Status = "safe" | "malicious";
 // status 변환 함수 추가
 const convertStatus = (is_phishing: boolean): Status => {
-  return is_phishing ? "safe" : "malicious";
+  return is_phishing ? "malicious" : "safe";
 };
 
 // useEffect 후 상태 변환
