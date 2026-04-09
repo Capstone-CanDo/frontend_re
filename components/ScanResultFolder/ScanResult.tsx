@@ -13,6 +13,7 @@ import {
 import { Button } from "../../components/ui/button";
 import { XAI_EXPLANATIONS } from "../../data/xaiTexts";
 import { AnalyzeResult, analyzeUrl } from "../../util/urlAnaylze";
+import { validateUrl } from "../../util/UrlValid";
 import { styles } from "./styles";
 
 interface ScanResultProps {
@@ -23,6 +24,7 @@ interface ScanResultProps {
 
 
 export function ScanResult({ url, onBack }: ScanResultProps) {
+  
   const [result, setResult] = useState<AnalyzeResult | null>(null);
   const [showRedirects, setShowRedirects] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -33,27 +35,46 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
 
   const router = useRouter();
   const [error, setError] = useState(false);
-  
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // ✅ 1. URL 분석
-  useEffect(() => {
-    const fetchResult = async () => {
-      try {
-        const token = await SecureStore.getItemAsync("token"); // SecureStore에서 JWT 꺼내기
-        console.log("토큰 확인:", token);
-        if (!token) throw new Error("토큰이 없습니다");
+useEffect(() => {
+  const fetchResult = async () => {
+    try {
+      // URL 검증
+      const validation = validateUrl(url);
 
-        const res = await analyzeUrl(url, token);
-        setResult(res);
-        console.log("서버 응답:", res);
-      } catch (e) {
-        console.error(e);
+      if (!validation.isValid || !validation.normalizedUrl) {
+        setErrorMessage("유효하지 않은 URL입니다.");
         setError(true);
+        return;
       }
-    };
 
+      const normalizedUrl = validation.normalizedUrl;
+      console.log("검증된 URL:", normalizedUrl);
+
+      // SecureStore에서 JWT 꺼내기
+      const token = await SecureStore.getItemAsync("token");
+      console.log("토큰 확인:", token);
+
+      if (!token) {
+        throw new Error("토큰이 없습니다");
+      }
+
+      // 서버에 URL 분석 요청
+      const res = await analyzeUrl(normalizedUrl, token);
+      setResult(res);
+      console.log("서버 응답:", res);
+    } catch (e) {
+      console.error("URL 분석 실패:", e);
+      setError(true);
+    }
+  };
+
+  if (url) {
     fetchResult();
-  }, [url]);
+  }
+}, [url]);
 
   type Status = "safe" | "malicious";
 // status 변환 함수 추가
@@ -66,8 +87,30 @@ const status = result ? convertStatus(result.is_phishing) : "safe";
 
  
   // ✅ 로딩 처리 (필수)
-  if (error) return <Text>분석 실패</Text>;
-if (!result) return <Text>분석중...</Text>;
+  if (error) {
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={onBack}>
+          <Text style={styles.back}>←</Text>
+        </TouchableOpacity>
+        <Image
+      source={require("../../assets/images/Qtravel_logo.png")}
+     style={styles.logo} 
+     resizeMode="contain" 
+  />
+      </View>
+      <View style={styles.errorcontainer}>
+      <Text style={styles.errortext}>{errorMessage || "분석 실패"}</Text>
+    </View>
+    </View>
+    
+  );
+}
+if (!result) 
+return (<View style={styles.errorcontainer}>
+  <Text style={styles.errortext}>분석중...</Text>
+  </View>);
   const handleCopy = () => {
     // RN에서는 Clipboard 따로 필요
     setCopied(true);
@@ -278,4 +321,4 @@ if (!result) return <Text>분석중...</Text>;
 
     </View>
   );
-}
+  }

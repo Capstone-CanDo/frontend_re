@@ -4,13 +4,23 @@ import { theme } from "../../constants/index";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: theme.colors.background,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#fff",
     padding: 12, 
+  },
+  errortext: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: theme.colors.primary,
+  },
+  errorcontainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   back: {
     fontSize: 20,
