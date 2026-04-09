@@ -18,6 +18,7 @@ expo 기반으로 다시 만든 프엔 레포
 - ✨ 스캔 결과 화면에서 url 검증 로직을 추가했습니다. url이 아닌걸로 확인 시 백엔드로 요청을 보내지 않게 했습니다.
 - ✨ 스캔 결과 화면에서 url 복사 기능을 구현했습니다.
 - 🐞 ERROR  Text strings must be rendered within a <Text> component. 가 이제 안뜨더라고요. 저도 이유는 잘 모르겠습니다. 혹시 이 오류가 생기면 알려주세요.
+- 🐞 components\ScanHistory\ScanHistory.tsx에 const data = await loadScanRecords(); 부분 오류표시 수정했습니다.
 - 🎨 스캔 결과 화면 UI를 수정했습니다. 수정 내용은 스크린샷을 참고해주세요. 리다이렉션 로그의 경우 BE 기능 추가 후 수정하겠습니다.
 - 🧺 카메라 대신 url 확인하는 코드 (components\Scan\QRScannerProps.tsx) 에서 정상, 의심 url을 대체했습니다. 원래 쓰던거 하니까 정상이 악성으로 뜨더라고요. 의심 url은 url 검증 로직 확인용으로 url이 아닌 문자열로 바꿨습니다.
 <p align="center">
