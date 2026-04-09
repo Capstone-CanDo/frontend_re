@@ -1,8 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface QRScannerProps {
   onScan: (url: string) => void;
@@ -13,7 +18,7 @@ export default function QRScanner({ onScan }: QRScannerProps) {
   const mockScans = [
     {
       label: "정상 URL 테스트",
-      url: "https://www.google.com",
+      url: "https://microsoft.com",
     },
     {
       label: "악성 URL 테스트 (피싱)",
@@ -21,14 +26,13 @@ export default function QRScanner({ onScan }: QRScannerProps) {
     },
     {
       label: "의심 URL 테스트",
-      url: "https://bit.ly/unknown-redirect",
+      url: "lululalalifegood",
     },
   ];
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.inner}>
-
         {/* 상단 아이콘 */}
         <View style={styles.header}>
           <View style={styles.iconCircle}>
@@ -58,9 +62,13 @@ export default function QRScanner({ onScan }: QRScannerProps) {
         {mockScans.map((scan, index) => (
           <TouchableOpacity
             key={index}
-              style={styles.scanButton}
-               onPress={() => router.push(`/ScanResultScreen?url=${encodeURIComponent(scan.url)}`)}
-               >
+            style={styles.scanButton}
+            onPress={() =>
+              router.push(
+                `/ScanResultScreen?url=${encodeURIComponent(scan.url)}`,
+              )
+            }
+          >
             <Ionicons name="qr-code-outline" size={20} color="#000" />
 
             <View style={styles.scanTextBox}>
@@ -77,17 +85,17 @@ export default function QRScanner({ onScan }: QRScannerProps) {
           <Text style={styles.tipTitle}>💡 사용 팁</Text>
 
           <Text style={styles.tip}>• QR 코드 스캔 전 주변을 확인하세요</Text>
-          <Text style={styles.tip}>• 의심스러운 위치의 QR 코드는 주의하세요</Text>
+          <Text style={styles.tip}>
+            • 의심스러운 위치의 QR 코드는 주의하세요
+          </Text>
           <Text style={styles.tip}>• 스캔 결과를 꼼꼼히 확인하세요</Text>
         </View>
-
       </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
     backgroundColor: "#f9fafb",
@@ -190,5 +198,4 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#374151",
   },
-
 });
