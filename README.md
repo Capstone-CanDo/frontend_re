@@ -2,6 +2,32 @@
 
 expo 기반으로 다시 만든 프엔 레포
 
+### 현재 진행 상황
+
+1. ✨ 임시로 로그인 기능을 구현했습니다.
+2. ✨ 스캔 결과(악성 판별), 스캔 기록을 BE와 연동했습니다.
+3. 🎨 스캔 결과, 스캔 기록 화면 UI를 수정했습니다.
+
+### 다음 브랜치에서 진행 예정인 사항
+
+1. 🎨 리다이렉션 로그 관련 기능 BE 추가 시 UI 수정
+2. 🐞 로그인 기능 관련 버그는 추후 다른 브랜치에서 수정할 예정입니다.
+
+## 0409 진행상황
+
+- ✨ 스캔 결과 화면에서 url 검증 로직을 추가했습니다. url이 아닌걸로 확인 시 백엔드로 요청을 보내지 않게 했습니다.
+- ✨ 스캔 결과 화면에서 url 복사 기능을 구현했습니다.
+- 🐞 ERROR  Text strings must be rendered within a <Text> component. 가 이제 안뜨더라고요. 저도 이유는 잘 모르겠습니다. 혹시 이 오류가 생기면 알려주세요.
+- 🎨 스캔 결과 화면 UI를 수정했습니다. 수정 내용은 스크린샷을 참고해주세요. 리다이렉션 로그의 경우 BE 기능 추가 후 수정하겠습니다.
+- 🧺 카메라 대신 url 확인하는 코드 (components\Scan\QRScannerProps.tsx) 에서 정상, 의심 url을 대체했습니다. 원래 쓰던거 하니까 정상이 악성으로 뜨더라고요. 의심 url은 url 검증 로직 확인용으로 url이 아닌 문자열로 바꿨습니다.
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ae1d084e-c214-456c-be0c-963bd30cf4cb" width="30%" />
+  <img src="https://github.com/user-attachments/assets/2787eaf6-23ed-479a-a800-5f4fda96add6" width="30%" />
+  <img src="https://github.com/user-attachments/assets/b7b1c7f3-88af-453f-8b0f-9b5cbd77ecc9" width="30%" />
+</p>
+
+
+
 ## 0407 진행상황
 
 - 🐞 ERROR  Text strings must be rendered within a <Text> component. -> SafeAreaProvider 때문에 일어나는 오류입니다. 텍스트 필드 때문이 아닙니다. 이거 저도 어떻게 고쳐야 할지 모르겠습니다... 나중에 고칠테니 무시해주세요.
@@ -13,8 +39,10 @@ expo 기반으로 다시 만든 프엔 레포
   - 피그마 프로토타입이랑 UI를 맞췄는데 아직 리다이렉션 부분과 아이콘 추가를 안했습니다.
   - AI 판단 근거 버튼 안에 정렬이 이상하게 되는 문제가 있습니다.
 
-<img width="340" height="770" alt="image" src="https://github.com/user-attachments/assets/832d64e2-7408-4f2a-b731-27400514b148" />
-<img width="340" height="770" alt="image" src="https://github.com/user-attachments/assets/6de6676a-db25-43ba-9220-af0997f2b4d8" />
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/832d64e2-7408-4f2a-b731-27400514b148" width="45%" />
+  <img src="https://github.com/user-attachments/assets/6de6676a-db25-43ba-9220-af0997f2b4d8" width="45%" />
+</p>
 
 
 
