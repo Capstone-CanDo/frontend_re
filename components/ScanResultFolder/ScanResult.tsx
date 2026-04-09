@@ -1,7 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
+import * as Clipboard from "expo-clipboard";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
-import { Brain, Clipboard } from "lucide-react-native";
+import { Brain, Copy } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
   Image,
@@ -110,11 +111,19 @@ if (!result)
 return (<View style={styles.errorcontainer}>
   <Text style={styles.errortext}>분석중...</Text>
   </View>);
-  const handleCopy = () => {
-    // RN에서는 Clipboard 따로 필요
+  const handleCopy = async () => {
+  try {
+    if (!url) return;
+
+    await Clipboard.setStringAsync(url);
     setCopied(true);
+
+    // 2초 후 상태 초기화
     setTimeout(() => setCopied(false), 2000);
-  };
+  } catch (error) {
+    console.error("복사 실패:", error);
+  }
+};
   // ✅ 안전하게 사용
   const currentExplanation =
   status && XAI_EXPLANATIONS[status]
@@ -207,7 +216,7 @@ return (<View style={styles.errorcontainer}>
 
         <TouchableOpacity style={styles.button} onPress={handleCopy}>
           <View style={styles.leftContent}>
-    <Clipboard size={20} color="#6B7280" style={{ marginRight: 8 }} />
+    <Copy size={20} color="#6B7280" style={{ marginRight: 8 }} />
     <Text style={styles.resultText}>{copied ? "복사됨!" : "URL 복사"}</Text>
   </View>
         </TouchableOpacity>
