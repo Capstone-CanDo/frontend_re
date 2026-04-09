@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
-import { Brain, GraduationCap, Shield, User } from "lucide-react-native";
+import { Brain, Clipboard } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
   Image,
@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { Button } from "../../components/ui/button";
 import { XAI_EXPLANATIONS } from "../../data/xaiTexts";
 import { AnalyzeResult, analyzeUrl } from "../../util/urlAnaylze";
 import { validateUrl } from "../../util/UrlValid";
@@ -86,7 +85,7 @@ const convertStatus = (is_phishing: boolean): Status => {
 const status = result ? convertStatus(result.is_phishing) : "safe";
 
  
-  // ✅ 로딩 처리 (필수)
+  // 유효한 url이 아닌 경우
   if (error) {
   return (
     <View style={styles.container}>
@@ -176,11 +175,27 @@ return (<View style={styles.errorcontainer}>
 
         {/* 버튼 */}
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => setShowRedirects(!showRedirects)}
-        >
-          <Text>URL 결과 보기</Text>
-        </TouchableOpacity>
+  style={styles.resultButton}
+  onPress={() => setShowRedirects(!showRedirects)}
+>
+  {/* 왼쪽 영역: 돋보기 아이콘 + 텍스트 */}
+  <View style={styles.leftContent}>
+    <Ionicons
+      name="search-outline"
+      size={20}
+      color="#4A6CF7"
+      style={styles.searchIcon}
+    />
+    <Text style={styles.resultText}>URL 결과</Text>
+  </View>
+
+  {/* 오른쪽 영역: 드롭다운 아이콘 */}
+  <Ionicons
+    name={showRedirects ? "chevron-up-outline" : "chevron-down-outline"}
+    size={20}
+    color="#6B7280"
+  />
+</TouchableOpacity>
 
         {/* 리다이렉션 */}
         {showRedirects && (
@@ -191,7 +206,10 @@ return (<View style={styles.errorcontainer}>
         )}
 
         <TouchableOpacity style={styles.button} onPress={handleCopy}>
-          <Text>{copied ? "복사됨!" : "URL 복사"}</Text>
+          <View style={styles.leftContent}>
+    <Clipboard size={20} color="#6B7280" style={{ marginRight: 8 }} />
+    <Text style={styles.resultText}>{copied ? "복사됨!" : "URL 복사"}</Text>
+  </View>
         </TouchableOpacity>
 
         
@@ -204,7 +222,7 @@ return (<View style={styles.errorcontainer}>
       router.push(`/WebViewScreen?url=${encodeURIComponent(url)}`);
     }}
   >
-    <Text style={{ color: "#fff" }}>보안 브라우저로 열기</Text>
+    <Text style={{ color: "#fff"}}>보안 브라우저로 열기</Text>
   </TouchableOpacity>
 )}
 
@@ -226,70 +244,7 @@ return (<View style={styles.errorcontainer}>
           <Text style={styles.title}>AI 판단 근거</Text>
         </View>
       </View>
-
-      {/* 버튼 */}
-      <View style={styles.levelContainer}>
-        
-        {/* 쉽게 */}
-        <Button
-          onPress={() => setExplanationLevel("beginner")}
-          style={[
-            styles.levelBtn,
-            explanationLevel === "beginner" && styles.activeBtn
-          ]}
-        >
-          <User
-            size={14}
-            color={explanationLevel === "beginner" ? "#2563eb" : "#6b7280"}
-          />
-          <Text style={[
-            styles.levelText,
-            explanationLevel === "beginner" && styles.activeText
-          ]}>
-            쉽게
-          </Text>
-        </Button>
-
-        {/* 보통 */}
-        <Button
-          onPress={() => setExplanationLevel("intermediate")}
-          style={[
-            styles.levelBtn,
-            explanationLevel === "intermediate" && styles.activeBtn
-          ]}
-        >
-          <GraduationCap
-            size={14}
-            color={explanationLevel === "intermediate" ? "#2563eb" : "#6b7280"}
-          />
-          <Text style={[
-            styles.levelText,
-            explanationLevel === "intermediate" && styles.activeText
-          ]}>
-            보통
-          </Text>
-        </Button>
-
-        {/* 전문가 */}
-        <Button
-          onPress={() => setExplanationLevel("expert")}
-          style={[
-            styles.levelBtn,
-            explanationLevel === "expert" && styles.activeBtn
-          ]}
-        >
-          <Shield
-            size={14}
-            color={explanationLevel === "expert" ? "#2563eb" : "#6b7280"}
-          />
-          <Text style={[
-            styles.levelText,
-            explanationLevel === "expert" && styles.activeText
-          ]}>
-            전문가
-          </Text>
-        </Button>
-      </View>
+      
 
       {/* 설명 */}
       <View style={styles.explainBox}>

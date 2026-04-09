@@ -91,11 +91,35 @@ export const styles = StyleSheet.create({
     borderRadius: 9999,
   },
   button: {
-    backgroundColor: "#fff",
+    backgroundColor: theme.colors.defalut,
     padding: 14,
     borderRadius: 10,
     marginBottom: 10,
   },
+  resultButton: {
+    backgroundColor: theme.colors.defalut,
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+  borderRadius: 16,
+  paddingVertical: 14,
+  paddingHorizontal: 16,
+  marginBottom: 10,
+},
+
+leftContent: {
+  flexDirection: "row",
+  alignItems: "center",
+},
+
+searchIcon: {
+  marginRight: 8,
+},
+
+resultText: {
+  fontSize: 14,
+  color: "#374151",
+},
   primaryBtn: {
     backgroundColor: "#2563eb",
     padding: 16,
