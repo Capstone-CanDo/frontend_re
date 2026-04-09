@@ -2,7 +2,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { useFonts } from "expo-font";
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import 'react-native-reanimated';
 import { SafeAreaProvider } from "react-native-safe-area-context"; // ✅ 추가
 
@@ -25,16 +25,16 @@ export default function RootLayout() {
   return (
     
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" color="#2563EB" />
       <Text>Loading...</Text>
     </View>
   );
 }
 
   return (
-    <SafeAreaProvider> {/* ✅ 여기 핵심 */}
+    <SafeAreaProvider>
       <AuthProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          
+        <Stack screenOptions={{ headerShown: false }}>    
           <Stack.Screen
             name="modal"
             options={{ presentation: "modal", title: "Modal" }}

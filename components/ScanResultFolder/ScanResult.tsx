@@ -5,6 +5,7 @@ import * as SecureStore from "expo-secure-store";
 import { Brain, Copy } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   ScrollView,
   Text,
@@ -109,6 +110,7 @@ const status = result ? convertStatus(result.is_phishing) : "safe";
 }
 if (!result) 
 return (<View style={styles.errorcontainer}>
+  <ActivityIndicator size="large" color="#2563EB" />
   <Text style={styles.errortext}>분석중...</Text>
   </View>);
   const handleCopy = async () => {
