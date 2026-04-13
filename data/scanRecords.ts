@@ -4,7 +4,6 @@ export interface ScanRecord {
   status: "safe" | "malicious" | "suspicious";
   date: string;
   time: string;
-  location: string;
   riskScore: number;
 }
 
@@ -28,7 +27,6 @@ export const scanRecords: ScanRecord[] = [
       status: "safe",
       date: "2026-03-05",
       time: "14:30",
-      location: "도쿄 신주쿠",
       riskScore: 5,
     },
     {
@@ -37,7 +35,6 @@ export const scanRecords: ScanRecord[] = [
       status: "malicious",
       date: "2026-03-05",
       time: "10:15",
-      location: "도쿄 시부야",
       riskScore: 87,
     },
     {
@@ -46,7 +43,6 @@ export const scanRecords: ScanRecord[] = [
       status: "suspicious",
       date: "2026-03-04",
       time: "18:45",
-      location: "도쿄 아키하바라",
       riskScore: 45,
     },
     {
@@ -55,7 +51,6 @@ export const scanRecords: ScanRecord[] = [
       status: "safe",
       date: "2026-03-04",
       time: "11:20",
-      location: "도쿄 우에노",
       riskScore: 8,
     },
     {
@@ -64,7 +59,6 @@ export const scanRecords: ScanRecord[] = [
       status: "malicious",
       date: "2026-03-03",
       time: "16:00",
-      location: "도쿄 하라주쿠",
       riskScore: 92,
     },
     {
@@ -73,7 +67,6 @@ export const scanRecords: ScanRecord[] = [
       status: "safe",
       date: "2026-03-03",
       time: "13:30",
-      location: "도쿄 긴자",
       riskScore: 3,
     },
   ];

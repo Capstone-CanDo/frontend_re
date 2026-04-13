@@ -1,5 +1,5 @@
 import { useFocusEffect, useRouter } from "expo-router";
-import { Globe, MapPin, QrCode, Search, TrendingDown, TrendingUp } from "lucide-react-native";
+import { Globe, QrCode, Search, TrendingDown, TrendingUp } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { theme } from "../../constants/index";
@@ -34,8 +34,7 @@ useFocusEffect(
 
   const filteredRecords = records.filter((record) => {
   const matchesSearch =
-    record.url.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    record.location.toLowerCase().includes(searchQuery.toLowerCase());
+    record.url.toLowerCase().includes(searchQuery.toLowerCase());
 
   const matchesFilter =
     filterStatus === "all" ? true : record.status === filterStatus;
@@ -196,14 +195,7 @@ useFocusEffect(
               </View>
 
               <View style={styles.bottomRow}>
-                
-                <View style={styles.locationRow}>
-                  <MapPin size={12} color={theme.fontcolor.second} />
-                  <Text style={styles.locationText}>{record.location}</Text>
-                </View>
-
                 {getStatusBadge(record.status)}
-
               </View>
 
             </View>
