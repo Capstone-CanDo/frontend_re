@@ -1,5 +1,5 @@
 import { useFocusEffect, useRouter } from "expo-router";
-import { Globe, MapPin, QrCode, Search, TrendingDown, TrendingUp } from "lucide-react-native";
+import { Globe, QrCode, Search, TrendingDown, TrendingUp } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { theme } from "../../constants/index";
@@ -117,7 +117,7 @@ export function ScanHistory() {
 
           {/* Filter 버튼 */}
           <View style={styles.filterRow}>
-            {(["all", "safe", "malicious", "suspicious"] as const).map((status) => (
+            {(["all", "safe", "malicious"] as const).map((status) => (
               <Button
                 key={status}
                 variant={filterStatus === status ? "default" : "outline"}
@@ -128,9 +128,7 @@ export function ScanHistory() {
                   ? "전체"
                   : status === "safe"
                   ? "안전"
-                  : status === "malicious"
-                  ? "위험"
-                  : "주의"}
+                  : "위험"}
               </Button>
             ))}
           </View>
@@ -151,7 +149,9 @@ export function ScanHistory() {
                 ]}
               >
                 <View style={styles.cardRow}>
-                  <QrCode size={20} color="#4b5563" />
+                  <View style={{ marginTop: 4 }}>
+                    <QrCode size={20} color="#4b5563" />
+                  </View>
                   <View style={styles.cardContent}>
                     <Text numberOfLines={1} style={styles.url}>
                       {record.url}
@@ -161,14 +161,9 @@ export function ScanHistory() {
                       <Text style={styles.metaText}>{date}</Text>
                       <Text style={styles.metaText}>{formattedTime}</Text>
                     </View>
-
-                    <View style={styles.bottomRow}>
-                      <View style={styles.locationRow}>
-                        <MapPin size={12} color={theme.fontcolor.second} />
-                        <Text style={styles.locationText}>{record.location}</Text>
-                      </View>
-                      {getStatusBadge(record.status)}
-                    </View>
+                  </View>
+                  <View style={{ marginTop: 4 }}>
+                    {getStatusBadge(record.status)}
                   </View>
                 </View>
 
