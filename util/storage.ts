@@ -19,50 +19,14 @@ export const saveScanRecords = async (records: ScanRecord[]) => {
 
 
 // 불러오기 (앱 시작 시 캐시용)
-export const loadScanRecords = async (
-  token?: string
-): Promise<ScanRecord[]> => {
+export const loadScanRecords = async (): Promise<ScanRecord[]> => {
   try {
-    console.log("📦 로컬 데이터 먼저 불러오기");
-
-    const localData = await AsyncStorage.getItem(STORAGE_KEY);
-    let parsed: ScanRecord[] = [];
-
-    if (localData) {
-      const temp = JSON.parse(localData);
-      if (Array.isArray(temp)) {
-        parsed = temp;
-      }
-    }
-
-    console.log("📦 로컬 데이터:", parsed.length);
-
-    // ✅ 토큰이 없으면 로컬 데이터만 반환
-    if (!token) {
-      console.log("🔑 토큰 없음 → 로컬 데이터 사용");
-      return parsed;
-    }
-
-    // ✅ 서버 데이터 가져오기
     console.log("📡 서버 요청 시작");
-    const serverData = await fetchScanRecords(token);
 
-    if (serverData && Array.isArray(serverData)) {
-      console.log("📡 서버 데이터:", serverData.length);
+    const serverData = await fetchScanRecords();
+    console.log("📡 서버 데이터:", serverData.length);
 
-      // 👉 서버 데이터로 교체 + 저장
-      await AsyncStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(serverData)
-      );
-
-      return serverData;
-    }
-
-    // 👉 서버 실패 시 로컬 데이터 fallback
-    console.log("⚠️ 서버 실패 → 로컬 데이터 사용");
-    return parsed;
-
+    return serverData;
   } catch (e) {
     console.error("❌ loadScanRecords 실패", e);
     return [];

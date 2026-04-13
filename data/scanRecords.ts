@@ -36,26 +36,39 @@ async function getAccessToken(): Promise<string> {
   return token;
 }
 
-export async function fetchScanRecords(token: string) {
+export async function fetchScanRecords(): Promise<ScanRecord[]> {
   try {
     console.log("📡 GET 요청 시작");
-    const token = await getAccessToken();
-    console.log("🔑 사용할 토큰:", token);
 
+    const token = await SecureStore.getItemAsync("token");
+
+    if (!token) {
+      throw new Error("Access Token이 존재하지 않습니다.");
+    }
+
+    console.log("🔑 사용할 토큰:", token);
 
     const response = await fetch(
       "https://backend-production-6ff2.up.railway.app/scanner/scan-history/",
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token.trim()}`,
+          "Content-Type": "application/json",
         },
       }
     );
 
+    if (response.status === 401) {
+      throw new Error("인증 실패(401): 토큰이 만료되었거나 유효하지 않습니다.");
+    }
+
+    if (!response.ok) {
+      throw new Error(`서버 오류: ${response.status}`);
+    }
+
     const data = await response.json();
-    console.log("📡 GET 응답:", data);
-    // is_phishing 기반으로 status 추가
+
     const mappedData: ScanRecord[] = data.map((item: any) => ({
       ...item,
       status: item.is_phishing === "True" ? "malicious" : "safe",
@@ -67,8 +80,6 @@ export async function fetchScanRecords(token: string) {
     return [];
   }
 }
-
-
 export const scanRecords: ScanRecord[] = [
   
 ];
