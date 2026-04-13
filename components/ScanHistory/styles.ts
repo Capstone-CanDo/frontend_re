@@ -30,8 +30,6 @@ content: {
     paddingHorizontal: 12,
   width: "100%",
   maxWidth: 393,
-
-  
 },
 
   headerTitle: {
@@ -216,7 +214,7 @@ suspiciousCard: {
   },
   safebrowserbuttonview: {
 
-    paddingTop: 8,
+    paddingTop: 12,
     backgroundColor: theme.colors.background,
   },
   safebrowserbutton: {

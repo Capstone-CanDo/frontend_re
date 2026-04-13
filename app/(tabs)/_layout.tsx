@@ -1,15 +1,23 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs, useRouter } from "expo-router";
 import { StyleSheet, TouchableOpacity } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
+  console.log(insets.bottom);
+  
+  const tabBarStyle = {
+  
+    paddingBottom: insets.bottom,
+  };
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: tabBarStyle,
         tabBarActiveTintColor: "#155DFC",
       }}
     >
@@ -72,11 +80,9 @@ export default function TabLayout() {
   );
 }
 
+
 const styles = StyleSheet.create({
-  tabBar: {
-    height: 100,
-    paddingBottom: 10,
-  },
+  
 
   scanButton: {
     position: "absolute",

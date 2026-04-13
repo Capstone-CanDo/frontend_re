@@ -2,6 +2,76 @@
 
 expo 기반으로 다시 만든 프엔 레포
 
+### 현재 진행 상황
+
+1. ✨ 임시로 로그인 기능을 구현했습니다.
+2. ✨ 스캔 결과(악성 판별), 스캔 기록을 BE와 연동했습니다.
+3. 🎨 스캔 결과, 스캔 기록 화면 UI를 수정했습니다.
+
+### 다음 브랜치에서 진행 예정인 사항
+
+1. 🎨 리다이렉션 로그 관련 기능 BE 추가 시 UI 수정
+2. 🐞 로그인 기능 관련 버그는 추후 다른 브랜치에서 수정할 예정입니다.
+
+## 0409 진행상황
+
+- ✨ 스캔 결과 화면에서 url 검증 로직을 추가했습니다. url이 아닌걸로 확인 시 백엔드로 요청을 보내지 않게 했습니다.
+- ✨ 스캔 결과 화면에서 url 복사 기능을 구현했습니다.
+- 🐞 ERROR  Text strings must be rendered within a <Text> component. 가 이제 안뜨더라고요. 저도 이유는 잘 모르겠습니다. 혹시 이 오류가 생기면 알려주세요.
+- 🐞 components\ScanHistory\ScanHistory.tsx에 const data = await loadScanRecords(); 부분 오류표시 수정했습니다.
+- 🎨 스캔 결과 화면 UI를 수정했습니다. 수정 내용은 스크린샷을 참고해주세요. 리다이렉션 로그의 경우 BE 기능 추가 후 수정하겠습니다.
+- 🧺 카메라 대신 url 확인하는 코드 (components\Scan\QRScannerProps.tsx) 에서 정상, 의심 url을 대체했습니다. 원래 쓰던거 하니까 정상이 악성으로 뜨더라고요. 의심 url은 url 검증 로직 확인용으로 url이 아닌 문자열로 바꿨습니다.
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ae1d084e-c214-456c-be0c-963bd30cf4cb" width="30%" />
+  <img src="https://github.com/user-attachments/assets/2787eaf6-23ed-479a-a800-5f4fda96add6" width="30%" />
+  <img src="https://github.com/user-attachments/assets/b7b1c7f3-88af-453f-8b0f-9b5cbd77ecc9" width="30%" />
+</p>
+
+
+
+## 0407 진행상황
+
+- 🐞 ERROR  Text strings must be rendered within a <Text> component. -> SafeAreaProvider 때문에 일어나는 오류입니다. 텍스트 필드 때문이 아닙니다. 이거 저도 어떻게 고쳐야 할지 모르겠습니다... 나중에 고칠테니 무시해주세요.
+- 🐞 스캔 기록 상태가 제대로 인식되지 않는 버그를 수정했습니다.
+- 🐞 스캔 기록을 최근 기록을 위에 보여주도록 수정했습니다.
+- 🐞 components\ScanHistory\ScanHistory.tsx에 const data = await loadScanRecords(); 부분 오류표시를 할 것입니다. 아직 AsyncStorage상에 데이터가 없어서 오류 표시 하는 것인데 데이터가 없는 상태에서도 동작하고 서버에서 데이터 가져오면 해결되는 문제라서 일단 무시해주세요.
+- 🎨 스캔 결과 UI를 수정했습니다. 추후 더 수정할 예정입니다.
+  - 일단 ppt에 예전 로고 쓰길래 일단 스캔 결과에도 올려놨습니다.
+  - 피그마 프로토타입이랑 UI를 맞췄는데 아직 리다이렉션 부분과 아이콘 추가를 안했습니다.
+  - AI 판단 근거 버튼 안에 정렬이 이상하게 되는 문제가 있습니다.
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/832d64e2-7408-4f2a-b731-27400514b148" width="45%" />
+  <img src="https://github.com/user-attachments/assets/6de6676a-db25-43ba-9220-af0997f2b4d8" width="45%" />
+</p>
+
+
+
+## 0406 진행상황 & 환경가이드
+
+현재 BE 연동을 위한 로그인, 스캔 결과 연동과 스캔 기록 연동을 구현했습니다.
+
+- 📚 npx expo install expo-secure-store 필요합니다. 자세한 내용은 9번 브랜치 확인 부탁드립니다.
+- 🐞 (tabs)/_layout.tsx의 하단바가 ios 상에서 원하는 위치에서 더 뜨게 나오는 문제를 SafeAreaProvider 를 사용해서 수정했습니다. 다만 아직 하단바 네비게이션 메뉴가 정상적으로 나오지 않는 문제는 수정하지 않았습니다. 현재 제 안드로이드 기기 상에서는 정상적으로 나오지만, ios상에서 어떻게 나오는지 확인 부탁드립니다.
+- ✨ 로그인 기능 구현했습니다. 현재 로그인 화면이 나오고 이메일과 비밀번호 입력은 가능하지만 실제로는 무엇을 입력해도 username: "testuser1", password: "testpass123"로 로그인 하게 됩니다. 아직 로그인 기능을 제대로 구현할 계획은 없으니 일단은 이대로 충분할 것 같습니다.
+  - 로그인에 실패해도 다음 페이지로 넘어가는 버그가 있고 아직 자동 로그인 기능과 로그아웃 기능을 손보지 못했습니다. 이후 이 점 수정 예정입니다.
+- ✨ 스캔 결과 BE 연동했습니다.
+  - 아직 UI 수정을 못해서 추후 수정 예정입니다.
+- ✨ 스캔 기록 BE 연동했습니다.
+  - 기존에 Status를 사용해 "safe" | "malicious" | "suspicious" 분류해서 UI를 만들었는데 JSON 응답에는 is_phishing: "True" | "False"; 이렇게 와서 정상이거나 악성인 url이 위험 url로 뜨는 버그가 있습니다. 추후 ScanHistort.tsx 수정할 예정입니다.
+
+
+## 0402 진행상황
+
+현재 scanresult와 scanhistory가 BE 연동과 구조가 맞지 않는것을 수정했습니다. 현재 UI상 작동을 확인하기 위해 JSON을 위한 코드는 주석처리되어 있고, 하드코딩된 데이터가 대신 동작하고 있습니다.
+
+<img width="340" height="770" alt="image" src="https://github.com/user-attachments/assets/ed49638e-86eb-443c-b37b-7e365d2bf92d" />
+<img width="340" height="770" alt="image" src="https://github.com/user-attachments/assets/40ab5003-47ac-4c35-8a1a-ef888b181a81" />
+
+
+
+추후 UI 수정을 하도록 하겠습니다
+
 ## 0330 진행상황\&환경가이드
 
 app.json 에 react-native-vision-camera가 아직 안지워져서 확인 부탁드립니다.

@@ -4,17 +4,31 @@ import { theme } from "../../constants/index";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: theme.colors.background,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 16,
     backgroundColor: "#fff",
+    padding: 12, 
+  },
+  errortext: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: theme.colors.primary,
+  },
+  errorcontainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   back: {
     fontSize: 20,
     marginRight: 12,
+  },
+  logo: {
+    width: 120, // 원하는 너비
+    height: 40, // 원하는 높이
   },
   title: {
     fontSize: 18,
@@ -25,27 +39,93 @@ export const styles = StyleSheet.create({
     padding: 16,
   },
   card: {
-    backgroundColor: "#fff",
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
   },
+  statusCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: 16,
+    gap: 12,
+
+    height: 82,
+    borderRadius: 16,
+
+    borderWidth: 1,
+    marginBottom: 12,  },
   statusText: {
     fontSize: 16,
     fontWeight: "600",
   },
+  // safe
+  safeCard: {
+    backgroundColor: "#F0FDF4",
+    borderColor: "#B9F8CF",
+  },
+  safeText: {
+    color: "#008236",
+  },
+
+  // malicious
+  maliciousCard: {
+    backgroundColor: "#FEF2F2",
+    borderColor: "#FFC9C9"
+  },
+  maliciousText: {
+    color: "#C10007",
+  },
+  iconWrapper: {
+  width: 48,
+  height: 48,
+  borderRadius: 9999,
+  justifyContent: "center",
+  alignItems: "center",
+},
+  safeiconWrapper: {
+    backgroundColor: "#DCFCE7",
+    borderRadius: 9999,
+  },
+  maliciousiconWrapper: {
+    borderColor: "#FFC9C9",
+    borderRadius: 9999,
+  },
   button: {
-    backgroundColor: "#fff",
+    backgroundColor: theme.colors.defalut,
     padding: 14,
     borderRadius: 10,
     marginBottom: 10,
   },
+  resultButton: {
+    backgroundColor: theme.colors.defalut,
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+  borderRadius: 16,
+  paddingVertical: 14,
+  paddingHorizontal: 16,
+  marginBottom: 10,
+},
+
+leftContent: {
+  flexDirection: "row",
+  alignItems: "center",
+},
+
+searchIcon: {
+  marginRight: 8,
+},
+
+resultText: {
+  fontSize: 14,
+  color: "#374151",
+},
   primaryBtn: {
     backgroundColor: "#2563eb",
     padding: 16,
     borderRadius: 12,
     alignItems: "center",
-    marginTop: 10,
+    marginBottom: 12,
   },
   warning: {
     padding: 16,
@@ -53,8 +133,19 @@ export const styles = StyleSheet.create({
     backgroundColor: "#ffe5e5",
     marginTop: 10,
   },
-
-  
+  xaicontainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 16,
+  },
+  xaiheader: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    height: 27,
+    marginBottom: 20,
+  },
   headerLeft: {
     flexDirection: "row",
     alignItems: "center",
@@ -74,6 +165,7 @@ export const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     backgroundColor: "#f3f4f6",
+    height: 60,
   },
 
   activeBtn: {

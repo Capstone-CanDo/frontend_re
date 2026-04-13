@@ -1,19 +1,20 @@
+import { Ionicons } from "@expo/vector-icons";
+import * as Clipboard from "expo-clipboard";
 import { useRouter } from "expo-router";
-import { Brain, GraduationCap, Shield, User } from "lucide-react-native";
+import * as SecureStore from "expo-secure-store";
+import { Brain, Copy } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
+  Image,
   ScrollView,
   Text,
   TouchableOpacity,
   View
 } from "react-native";
-import { Button } from "../../components/ui/button";
-import { addScanRecord, ScanRecord } from "../../data/scanRecords";
 import { XAI_EXPLANATIONS } from "../../data/xaiTexts";
-import { getScanMeta } from "../../util/scanMeta";
-import { loadScanRecords, saveScanRecords } from "../../util/storage";
 import { AnalyzeResult, analyzeUrl } from "../../util/urlAnaylze";
-import { Card } from "../ui/card";
+import { validateUrl } from "../../util/UrlValid";
 import { styles } from "./styles";
 
 interface ScanResultProps {
@@ -24,6 +25,7 @@ interface ScanResultProps {
 
 
 export function ScanResult({ url, onBack }: ScanResultProps) {
+  
   const [result, setResult] = useState<AnalyzeResult | null>(null);
   const [showRedirects, setShowRedirects] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -33,55 +35,102 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
     useState<ExplanationLevel>("beginner");
 
   const router = useRouter();
-
-  type Status = ScanRecord["status"];
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // ✅ 1. URL 분석
-  useEffect(() => {
-    const runAnalysis = async () => {
-      const res = await analyzeUrl(url);
+useEffect(() => {
+  const fetchResult = async () => {
+    try {
+      // URL 검증
+      const validation = validateUrl(url);
+
+      if (!validation.isValid || !validation.normalizedUrl) {
+        setErrorMessage("유효하지 않은 URL입니다.");
+        setError(true);
+        return;
+      }
+
+      const normalizedUrl = validation.normalizedUrl;
+      console.log("검증된 URL:", normalizedUrl);
+
+      // SecureStore에서 JWT 꺼내기
+      const token = await SecureStore.getItemAsync("token");
+      console.log("토큰 확인:", token);
+
+      if (!token) {
+        throw new Error("토큰이 없습니다");
+      }
+
+      // 서버에 URL 분석 요청
+      const res = await analyzeUrl(normalizedUrl, token);
       setResult(res);
-    };
-
-    runAnalysis();
-  }, [url]);
-
-  // ✅ 2. 저장
-  useEffect(() => {
-    if (!result) return;
-
-    const handleSave = async () => {
-      const existing = await loadScanRecords();
-
-      const updated = addScanRecord(existing, {
-        url,
-        status: result.status,
-        ...getScanMeta(),
-        riskScore: result.riskScore, // 🔥 중요
-      });
-
-      await saveScanRecords(updated);
-      console.log("저장 완료");
-    };
-
-    handleSave();
-  }, [result]);
-
-  // ✅ 로딩 처리 (필수)
-  if (!result) {
-    return (
-      <View style={styles.container}>
-        <Text>분석 중...</Text>
-      </View>
-    );
-  }
-  const handleCopy = () => {
-    // RN에서는 Clipboard 따로 필요
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+      console.log("서버 응답:", res);
+    } catch (e) {
+      console.error("URL 분석 실패:", e);
+      setError(true);
+    }
   };
+
+  if (url) {
+    fetchResult();
+  }
+}, [url]);
+
+  type Status = "safe" | "malicious";
+// status 변환 함수 추가
+const convertStatus = (is_phishing: boolean): Status => {
+  return is_phishing ? "malicious" : "safe";
+};
+
+// useEffect 후 상태 변환
+const status = result ? convertStatus(result.is_phishing) : "safe";
+
+ 
+  // 유효한 url이 아닌 경우
+  if (error) {
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={onBack}>
+          <Text style={styles.back}>←</Text>
+        </TouchableOpacity>
+        <Image
+      source={require("../../assets/images/Qtravel_logo.png")}
+     style={styles.logo} 
+     resizeMode="contain" 
+  />
+      </View>
+      <View style={styles.errorcontainer}>
+      <Text style={styles.errortext}>{errorMessage || "분석 실패"}</Text>
+    </View>
+    </View>
+    
+  );
+}
+if (!result) 
+return (<View style={styles.errorcontainer}>
+  <ActivityIndicator size="large" color="#2563EB" />
+  <Text style={styles.errortext}>분석중...</Text>
+  </View>);
+  const handleCopy = async () => {
+  try {
+    if (!url) return;
+
+    await Clipboard.setStringAsync(url);
+    setCopied(true);
+
+    // 2초 후 상태 초기화
+    setTimeout(() => setCopied(false), 2000);
+  } catch (error) {
+    console.error("복사 실패:", error);
+  }
+};
   // ✅ 안전하게 사용
-  const currentExplanation = XAI_EXPLANATIONS[result.status][explanationLevel];
+  const currentExplanation =
+  status && XAI_EXPLANATIONS[status]
+    ? XAI_EXPLANATIONS[status][explanationLevel]
+    : { title: "정보 없음", points: [], advice: "" };
 
   return (
     
@@ -91,28 +140,73 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
         <TouchableOpacity onPress={onBack}>
           <Text style={styles.back}>←</Text>
         </TouchableOpacity>
-        <Text style={styles.title}>큐트캡</Text>
+        <Image
+      source={require("../../assets/images/Qtravel_logo.png")}
+     style={styles.logo} // 스타일로 크기 조절 가능
+     resizeMode="contain" // 이미지 비율 유지
+  />
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* 상태 */}
-        <View style={styles.card}>
-          <Text style={styles.statusText}>{result.message}</Text>
-        </View>
+        <View
+  style={[
+    styles.statusCard,
+    status === "safe" && styles.safeCard,
+    status === "malicious" && styles.maliciousCard,
+  ]}
+>
+  <View style={[styles.iconWrapper,
+    status === "safe" && styles.safeiconWrapper,
+    status === "malicious" && styles.maliciousiconWrapper,
+  ]}>
+        <Ionicons
+           name="link-outline"
+           size={20}
+           color={
+            status === "safe"
+            ? "#008236"
+           : status === "malicious"
+            ? "#C10007"
+            : "#999" // optional (suspicious 등)
+  }
+/>
+      </View>
+  <Text
+    style={[
+      styles.statusText,
+      status === "safe" && styles.safeText,
+      status === "malicious" && styles.maliciousText,
+    ]}
+  >
+    {result.message}
+  </Text>
+</View>
 
-        <Card><Text>{url}</Text></Card>
 
         {/* 버튼 */}
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => setShowRedirects(!showRedirects)}
-        >
-          <Text>URL 결과 보기</Text>
-        </TouchableOpacity>
+  style={styles.resultButton}
+  onPress={() => setShowRedirects(!showRedirects)}
+>
+  {/* 왼쪽 영역: 돋보기 아이콘 + 텍스트 */}
+  <View style={styles.leftContent}>
+    <Ionicons
+      name="search-outline"
+      size={20}
+      color="#4A6CF7"
+      style={styles.searchIcon}
+    />
+    <Text style={styles.resultText}>URL 결과</Text>
+  </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleCopy}>
-          <Text>{copied ? "복사됨!" : "URL 복사"}</Text>
-        </TouchableOpacity>
+  {/* 오른쪽 영역: 드롭다운 아이콘 */}
+  <Ionicons
+    name={showRedirects ? "chevron-up-outline" : "chevron-down-outline"}
+    size={20}
+    color="#6B7280"
+  />
+</TouchableOpacity>
 
         {/* 리다이렉션 */}
         {showRedirects && (
@@ -122,20 +216,29 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
           </View>
         )}
 
+        <TouchableOpacity style={styles.button} onPress={handleCopy}>
+          <View style={styles.leftContent}>
+    <Copy size={20} color="#6B7280" style={{ marginRight: 8 }} />
+    <Text style={styles.resultText}>{copied ? "복사됨!" : "URL 복사"}</Text>
+  </View>
+        </TouchableOpacity>
+
+        
+
         {/* 안전할 때만 */}
-        {result.status === "safe" && (
+        {status === "safe" && (
   <TouchableOpacity
     style={styles.primaryBtn}
     onPress={() => {
       router.push(`/WebViewScreen?url=${encodeURIComponent(url)}`);
     }}
   >
-    <Text style={{ color: "#fff" }}>보안 브라우저로 열기</Text>
+    <Text style={{ color: "#fff"}}>보안 브라우저로 열기</Text>
   </TouchableOpacity>
 )}
 
         {/* 위험 */}
-        {result.status !== "safe" && (
+        {status !== "safe" && (
           <View style={styles.warning}>
             <Text style={{ color: "red" }}>
               ⚠️ 위험할 수 있습니다
@@ -143,79 +246,16 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
           </View>
         )}
 
-        <View style={styles.card}>
-      
+
+      <View style = {styles.xaicontainer}>
       {/* 헤더 */}
-      <View style={styles.header}>
+      <View style={styles.xaiheader}>
         <View style={styles.headerLeft}>
           <Brain size={18} color="#2563eb" />
           <Text style={styles.title}>AI 판단 근거</Text>
         </View>
       </View>
-
-      {/* 버튼 */}
-      <View style={styles.levelContainer}>
-        
-        {/* 쉽게 */}
-        <Button
-          onPress={() => setExplanationLevel("beginner")}
-          style={[
-            styles.levelBtn,
-            explanationLevel === "beginner" && styles.activeBtn
-          ]}
-        >
-          <User
-            size={14}
-            color={explanationLevel === "beginner" ? "#2563eb" : "#6b7280"}
-          />
-          <Text style={[
-            styles.levelText,
-            explanationLevel === "beginner" && styles.activeText
-          ]}>
-            쉽게
-          </Text>
-        </Button>
-
-        {/* 보통 */}
-        <Button
-          onPress={() => setExplanationLevel("intermediate")}
-          style={[
-            styles.levelBtn,
-            explanationLevel === "intermediate" && styles.activeBtn
-          ]}
-        >
-          <GraduationCap
-            size={14}
-            color={explanationLevel === "intermediate" ? "#2563eb" : "#6b7280"}
-          />
-          <Text style={[
-            styles.levelText,
-            explanationLevel === "intermediate" && styles.activeText
-          ]}>
-            보통
-          </Text>
-        </Button>
-
-        {/* 전문가 */}
-        <Button
-          onPress={() => setExplanationLevel("expert")}
-          style={[
-            styles.levelBtn,
-            explanationLevel === "expert" && styles.activeBtn
-          ]}
-        >
-          <Shield
-            size={14}
-            color={explanationLevel === "expert" ? "#2563eb" : "#6b7280"}
-          />
-          <Text style={[
-            styles.levelText,
-            explanationLevel === "expert" && styles.activeText
-          ]}>
-            전문가
-          </Text>
-        </Button>
-      </View>
+      
 
       {/* 설명 */}
       <View style={styles.explainBox}>
@@ -229,18 +269,17 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
           </Text>
         ))}
       </View>
-
+        </View>
       {/* 조언 */}
       <View style={[
         styles.adviceBox,
-        result.status === "safe" && styles.safe,
-        result.status === "suspicious" && styles.suspicious,
-        result.status === "malicious" && styles.danger,
+        status === "safe" && styles.safe,
+        status === "malicious" && styles.danger,
       ]}>
         <Text style={styles.adviceText}>
           💡 {currentExplanation.advice}
         </Text>
-      </View>
+
     </View>
         
       </ScrollView>
@@ -248,4 +287,4 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
 
     </View>
   );
-}
+  }

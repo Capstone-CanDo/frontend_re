@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { theme } from "../../constants/index";
 import { ScanRecord } from "../../data/scanRecords";
-import { clearScanRecords, loadScanRecords } from "../../util/storage";
+import { loadScanRecords } from "../../util/storage";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
@@ -15,8 +15,11 @@ import { styles } from "./styles";
 
 
 export function ScanHistory() {
+// JWT 토큰 가져오기 예시
+
+
   const [searchQuery, setSearchQuery] = useState("");
-   const [filterStatus, setFilterStatus] = useState<"all" | "safe" | "malicious" | "suspicious">("all");
+  const [filterStatus, setFilterStatus] = useState<"all" | "safe" | "malicious" | "suspicious">("all");
   const router = useRouter();
   const [records, setRecords] = useState<ScanRecord[]>([]);
 
@@ -39,8 +42,23 @@ useFocusEffect(
   const matchesFilter =
     filterStatus === "all" ? true : record.status === filterStatus;
 
-  return matchesSearch && matchesFilter;
-});
+  // 필터링
+  const filteredRecords = records
+  .filter((record) => {
+    const matchesSearch =
+      record.url.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (record.location?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false);
+
+    const matchesFilter =
+      filterStatus === "all" ? true : record.status === filterStatus;
+
+    return matchesSearch && matchesFilter;
+  })
+  .sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() -
+      new Date(a.created_at).getTime()
+  );
 
   const stats = {
     total: records.length,
@@ -48,170 +66,131 @@ useFocusEffect(
     malicious: records.filter((r) => r.status === "malicious").length,
   };
 
-  
-
   const getStatusBadge = (status: string) => {
     if (status === "safe") return <Badge>안전</Badge>;
     if (status === "malicious") return <Badge variant="destructive">위험</Badge>;
     return <Badge variant="secondary">주의</Badge>;
   };
 
+
   return (
     <View style={styles.container}>
-    <ScrollView contentContainerStyle={styles.scrollContent}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.Headercontent}>
-        {/*<Text style={[styles.headerTitle, { position: "absolute", top: 24, left: 0, right: 0 }]}>스캔 기록</Text>
-        <Text style={[styles.headerSub, { position: "absolute", top: 59, left: 0, right: 0 }]}>내 QR 스캔 히스토리</Text>*/}
-        <Text style={styles.headerTitle}>스캔 기록</Text>
-        <Text style={styles.headerSub}>내 QR 스캔 히스토리</Text>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.Headercontent}>
+            <Text style={styles.headerTitle}>스캔 기록</Text>
+            <Text style={styles.headerSub}>내 QR 스캔 히스토리</Text>
+          </View>
         </View>
-      </View>
-<View style={styles.content}>
-  {/* Stats 등 */}
-     
 
-      {/* Stats */}
-      <Card style={styles.statsCard}>
-        <View style={styles.statsRow}>
-          
-          <View style={styles.statItem}>
-            <Text style={styles.statNumber}>{stats.total}</Text>
-            <Text style={styles.statLabel}>총 스캔</Text>
-          </View>
-
-          <View style={styles.statcenterItem}>
-            <View style={styles.statRow}>
-              <TrendingUp size={16} color= {theme.colors.safe} />
-              <Text style={styles.safeNumber}>{stats.safe}</Text>
-            </View>
-            <Text style={styles.statLabel}>안전</Text>
-          </View>
-
-          <View style={styles.statItem}>
-            <View style={styles.statRow}>
-              <TrendingDown size={16} color={theme.colors.danger} />
-              <Text style={styles.dangerNumber}>{stats.malicious}</Text>
-            </View>
-            <Text style={styles.statLabel}>위험 차단</Text>
-          </View>
-
-        </View>
-      </Card>
-
-      {/* Search */}
-      <View style={styles.searchRow}>
-        <Search size={16} color="#9ca3af" />
-        <Input
-          placeholder="URL 또는 위치 검색..."
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.filterRow}>
-
-        {/* 종류별 분류 버튼 */}
-  <Button
-    variant={filterStatus === "all" ? "default" : "outline"}
-    onPress={() => setFilterStatus("all")}
-    style={[filterStatus === "all" && styles.allActive, { paddingHorizontal: 13, paddingVertical: 6 }]}
-  >
-    전체
-  </Button>
-
-  <Button
-    variant={filterStatus === "safe" ? "default" : "outline"}
-    onPress={() => setFilterStatus("safe")}
-    style={[filterStatus === "safe" && styles.safeActive, { paddingHorizontal: 13, paddingVertical: 6 }]}
-  >
-    안전
-  </Button>
-
-  <Button
-    variant={filterStatus === "malicious" ? "default" : "outline"}
-    onPress={() => setFilterStatus("malicious")}
-    style={[filterStatus === "malicious" && styles.dangerActive, { paddingHorizontal: 13, paddingVertical: 6 }]}
-  >
-    위험
-  </Button>
-
-
-
-  <Button
-    variant={filterStatus === "suspicious" ? "default" : "outline"}
-    onPress={() => setFilterStatus("suspicious")}
-    style={[filterStatus === "suspicious" && styles.warningActive, { paddingHorizontal: 13, paddingVertical: 6 }]}
-  >
-    주의
-  </Button>
-
-    <Button
-    onPress={async () => {
-    setRecords([]); // ⭐ 먼저 UI 초기화
-
-  await clearScanRecords();
-
-  const newRecords = await loadScanRecords();
-  setRecords(newRecords);
-
-  console.log("초기화 완료");
-  }
-  
-}
-    style={[filterStatus === "malicious" && styles.dangerActive, { paddingHorizontal: 13, paddingVertical: 6 }]}
-  >
-    삭제
-  </Button>
-</View>
-
-      {/* Scan list */}
-      {filteredRecords.map((record) => (
-        <Card
-         key={record.id}
-         style={[
-            styles.card,
-             record.status === "safe" && styles.safeCard,
-             record.status === "malicious" && styles.maliciousCard,
-            record.status === "suspicious" && styles.suspiciousCard,
-  ]}
->
-
-          <View style={styles.cardRow}>
-
-            <QrCode size={20} color="#4b5563" />
-
-            <View style={styles.cardContent}>
-
-              <Text numberOfLines={1} style={styles.url}>
-                {record.url}
-              </Text>
-
-              <View style={styles.metaRow}>
-                <Text style={styles.metaText}>{record.date}</Text>
-                <Text style={styles.metaText}>{record.time}</Text>
+        <View style={styles.content}>
+          {/* Stats */}
+          <Card style={styles.statsCard}>
+            <View style={styles.statsRow}>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{stats.total}</Text>
+                <Text style={styles.statLabel}>총 스캔</Text>
               </View>
 
               <View style={styles.bottomRow}>
                 {getStatusBadge(record.status)}
               </View>
 
+              <View style={styles.statItem}>
+                <View style={styles.statRow}>
+                  <TrendingDown size={16} color={theme.colors.danger} />
+                  <Text style={styles.dangerNumber}>{stats.malicious}</Text>
+                </View>
+                <Text style={styles.statLabel}>위험 차단</Text>
+              </View>
             </View>
+          </Card>
+
+          {/* Search */}
+          <View style={styles.searchRow}>
+            <Search size={16} color="#9ca3af" />
+            <Input
+              placeholder="URL 또는 위치 검색..."
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              style={styles.input}
+            />
           </View>
-          {record.status === "safe" && (
-    <View style={styles.safebrowserbuttonview}>
-      <Button style = {styles.safebrowserbutton} >
-        <Globe size={14} color={theme.fontcolor.defaultblack} />
-      <Text style = {styles.safebuttontext} onPress={() => router.push(`/WebViewScreen?url=${encodeURIComponent(record.url)}`)}>  보안 브라우저로 다시 열기</Text>
-    </Button>
+
+          {/* Filter 버튼 */}
+          <View style={styles.filterRow}>
+            {(["all", "safe", "malicious"] as const).map((status) => (
+              <Button
+                key={status}
+                variant={filterStatus === status ? "default" : "outline"}
+                onPress={() => setFilterStatus(status)}
+                style={{ paddingHorizontal: 13, paddingVertical: 6 }}
+              >
+                {status === "all"
+                  ? "전체"
+                  : status === "safe"
+                  ? "안전"
+                  : "위험"}
+              </Button>
+            ))}
+          </View>
+
+          {/* Scan list */}
+          {filteredRecords.map((record) => {
+            const [date, time] = record.created_at.split("T");
+            const formattedTime = time.split(".")[0];
+
+            return (
+              <Card
+                key={record.id}
+                style={[
+                  styles.card,
+                  record.status === "safe" && styles.safeCard,
+                  record.status === "malicious" && styles.maliciousCard,
+                  record.status === "suspicious" && styles.suspiciousCard,
+                ]}
+              >
+                <View style={styles.cardRow}>
+                  <View style={{ marginTop: 4 }}>
+                    <QrCode size={20} color="#4b5563" />
+                  </View>
+                  <View style={styles.cardContent}>
+                    <Text numberOfLines={1} style={styles.url}>
+                      {record.url}
+                    </Text>
+
+                    <View style={styles.metaRow}>
+                      <Text style={styles.metaText}>{date}</Text>
+                      <Text style={styles.metaText}>{formattedTime}</Text>
+                    </View>
+                  </View>
+                  <View style={{ marginTop: 4 }}>
+                    {getStatusBadge(record.status)}
+                  </View>
+                </View>
+
+                {record.status === "safe" && (
+                  <View style={styles.safebrowserbuttonview}>
+                    <Button style={styles.safebrowserbutton}>
+                      <Globe size={14} color={theme.fontcolor.defaultblack} />
+                      <Text
+                        style={styles.safebuttontext}
+                        onPress={() =>
+                          router.push(`/WebViewScreen?url=${encodeURIComponent(record.url)}`)
+                        }
+                      >
+                        {" "}
+                        보안 브라우저로 다시 열기
+                      </Text>
+                    </Button>
+                  </View>
+                )}
+              </Card>
+            );
+          })}
+        </View>
+      </ScrollView>
     </View>
-  )}
-        </Card>
-      ))}
-      </View>
-    </ScrollView>
-      </View>
   );
 }

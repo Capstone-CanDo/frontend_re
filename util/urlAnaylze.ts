@@ -1,34 +1,54 @@
-
-
-export type Status = "safe" | "suspicious" | "malicious";
-
 export interface AnalyzeResult {
-  status: Status;
+  id: number;
+  url: string;
+  is_phishing: boolean;
+  explanation: string | null;
+  travel: number;
+  created_at: string;
   message: string;
-  riskScore: number; // ✅ 추가
 }
 
-export const analyzeUrl = async (url: string): Promise<AnalyzeResult> => {
-  // 임시 로직 (나중에 API로 교체)
-  if (url.includes("g00gle") || url.includes("suspicious")) {
-    return {
-      status: "malicious",
-      message: "위험한 사이트에요",
-      riskScore: 10, // ✅ 고정값
-    };
+
+ 
+//BE 연동용 코드
+
+
+export const analyzeUrl = async (
+  url: string,
+  token: string
+): Promise<AnalyzeResult> => {
+  const response = await fetch(
+    "https://backend-production-6ff2.up.railway.app/scanner/scan/",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        url: url,
+        travel_id: 1,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error("에러 응답:", errorText);
+    throw new Error("분석 실패");
   }
 
-  if (url.includes("bit.ly")) {
-    return {
-      status: "suspicious",
-      message: "주의가 필요해요",
-      riskScore: 10,
-    };
-  }
+  const data = await response.json();
+  console.log("📦 JSON 응답:", data);
+
+  // ✅ 여기서 message 생성
+  const message = data.is_phishing
+    ? "안전한 사이트입니다"
+    : "위험한 사이트일 수 있습니다";
 
   return {
-    status: "safe",
-    message: "안전한 사이트에요",
-    riskScore: 10,
+    ...data,
+    message,
   };
 };
+

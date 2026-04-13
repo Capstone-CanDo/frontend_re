@@ -1,17 +1,17 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { AuthProvider } from "@/context/AuthContext";
 import { useFonts } from "expo-font";
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { ActivityIndicator, Text, View } from "react-native";
 import 'react-native-reanimated';
+import { SafeAreaProvider } from "react-native-safe-area-context"; // ✅ 추가
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+
+
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  
 
   const [fontsLoaded] = useFonts({
     Pretendard: require("../assets/font/Pretendard-Regular.ttf"),
@@ -20,15 +20,28 @@ export default function RootLayout() {
   });
 
   // 🔥 폰트 로딩 끝날 때까지 렌더링 막기
-  if (!fontsLoaded) return null;
+  if (!fontsLoaded) {
+    console.log("폰트");
+  return (
+    
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" color="#2563EB" />
+      <Text>Loading...</Text>
+    </View>
+  );
+}
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <Stack screenOptions={{ headerShown: false }}>    
+          <Stack.Screen
+            name="modal"
+            options={{ presentation: "modal", title: "Modal" }}
+          />
+        </Stack>
+        <StatusBar style="auto" />
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }
