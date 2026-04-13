@@ -32,7 +32,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="history"
+        name="history/historyScreen"
         options={{
           title: "스캔기록",
           tabBarIcon: ({ color, size }) => (
@@ -43,13 +43,13 @@ export default function TabLayout() {
 
       {/* 중앙 스캔 버튼 */}
       <Tabs.Screen
-        name="scan"
+        name="scan/scancamera"
         options={{
           title: "",
           tabBarButton: () => (
             <TouchableOpacity
               style={styles.scanButton}
-              onPress={() => router.navigate("/scan")}
+              onPress={() => router.navigate("/(tabs)/scan/scancamera")}
             >
               <Ionicons name="scan" size={28} color="white" />
             </TouchableOpacity>
