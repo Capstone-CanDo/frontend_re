@@ -1,10 +1,9 @@
 export interface ScanMeta {
   date: string;
   time: string;
-  location: string;
 }
 
-// 현재 시간 + 위치 생성
+// 현재 시간 생성
 export const getScanMeta = (): ScanMeta => {
   const now = new Date();
 
@@ -15,8 +14,5 @@ export const getScanMeta = (): ScanMeta => {
     hour12: false,
   });
 
-  // 지금은 임시 (나중에 GPS로 교체 가능)
-  const location = "서울 강남";
-
-  return { date, time, location };
+  return { date, time };
 };

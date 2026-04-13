@@ -32,12 +32,11 @@ export function CardAction({ children, style }: any) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: theme.colors.background,
+    backgroundColor: "#fff",
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#e5e5e5",
+    borderColor: "#E0DEDE",
     paddingVertical: 16,
-    marginBottom: 16,
   },
 
   header: {
