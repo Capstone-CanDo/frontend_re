@@ -23,24 +23,17 @@ export function ScanHistory() {
   const router = useRouter();
   const [records, setRecords] = useState<ScanRecord[]>([]);
 
-useFocusEffect(
-  useCallback(() => {
-    const fetchData = async () => {
-      const data = await loadScanRecords();
-      console.log("불러온 데이터:", data);
-      setRecords(data);
-    };
-
-    fetchData();
-  }, [])
-);
-
-  const filteredRecords = records.filter((record) => {
-  const matchesSearch =
-    record.url.toLowerCase().includes(searchQuery.toLowerCase());
-
-  const matchesFilter =
-    filterStatus === "all" ? true : record.status === filterStatus;
+  // 스캔 기록 로드
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        const data = await loadScanRecords();
+        console.log("불러온 데이터:", data);
+        setRecords(data);
+      };
+      fetchData();
+    }, [])
+  );
 
   // 필터링
   const filteredRecords = records
@@ -93,8 +86,12 @@ useFocusEffect(
                 <Text style={styles.statLabel}>총 스캔</Text>
               </View>
 
-              <View style={styles.bottomRow}>
-                {getStatusBadge(record.status)}
+              <View style={styles.statcenterItem}>
+                <View style={styles.statRow}>
+                  <TrendingUp size={16} color={theme.colors.safe} />
+                  <Text style={styles.safeNumber}>{stats.safe}</Text>
+                </View>
+                <Text style={styles.statLabel}>안전</Text>
               </View>
 
               <View style={styles.statItem}>
