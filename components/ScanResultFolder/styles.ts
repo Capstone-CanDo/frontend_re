@@ -131,7 +131,8 @@ resultText: {
     padding: 16,
     borderRadius: 12,
     backgroundColor: "#ffe5e5",
-    marginTop: 10,
+    marginTop: 8,
+    marginBottom: 12,
   },
   xaicontainer: {
     flex: 1,

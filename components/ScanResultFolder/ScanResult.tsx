@@ -13,8 +13,9 @@ import {
   View
 } from "react-native";
 import { XAI_EXPLANATIONS } from "../../data/xaiTexts";
-import { AnalyzeResult, analyzeUrl } from "../../util/urlAnaylze";
+import { AnalyzeResult, analyzeUrl, Explanation } from "../../util/urlAnaylze";
 import { validateUrl } from "../../util/UrlValid";
+import RedirectLog from "./redirectlog";
 import { styles } from "./styles";
 
 interface ScanResultProps {
@@ -27,6 +28,8 @@ interface ScanResultProps {
 export function ScanResult({ url, onBack }: ScanResultProps) {
   
   const [result, setResult] = useState<AnalyzeResult | null>(null);
+  const [XaiExplanation, setXaiExplanation] = 
+  useState<Explanation | null>(null);
   const [showRedirects, setShowRedirects] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -210,10 +213,7 @@ return (<View style={styles.errorcontainer}>
 
         {/* 리다이렉션 */}
         {showRedirects && (
-          <View style={styles.card}>
-            <Text>리다이렉션 정보 (예시)</Text>
-            <Text>{url}</Text>
-          </View>
+          <RedirectLog redirect={result.explanation?.redirect} />
         )}
 
         <TouchableOpacity style={styles.button} onPress={handleCopy}>
@@ -237,15 +237,6 @@ return (<View style={styles.errorcontainer}>
   </TouchableOpacity>
 )}
 
-        {/* 위험 */}
-        {status !== "safe" && (
-          <View style={styles.warning}>
-            <Text style={{ color: "red" }}>
-              ⚠️ 위험할 수 있습니다
-            </Text>
-          </View>
-        )}
-
 
       <View style = {styles.xaicontainer}>
       {/* 헤더 */}
@@ -260,17 +251,11 @@ return (<View style={styles.errorcontainer}>
       {/* 설명 */}
       <View style={styles.explainBox}>
         <Text style={styles.explainTitle}>
-          {currentExplanation.title}
+          {result.explanation?.summary}
         </Text>
 
-        {currentExplanation.points.map((point, i) => (
-          <Text key={i} style={styles.point}>
-            {point}
-          </Text>
-        ))}
+        
       </View>
-        </View>
-      {/* 조언 */}
       <View style={[
         styles.adviceBox,
         status === "safe" && styles.safe,
@@ -279,12 +264,11 @@ return (<View style={styles.errorcontainer}>
         <Text style={styles.adviceText}>
           💡 {currentExplanation.advice}
         </Text>
-
-    </View>
-        
+    </View>     
+        </View>
+      {/* 조언 */}
+         
       </ScrollView>
-
-
     </View>
   );
   }

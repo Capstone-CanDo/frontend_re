@@ -1,13 +1,26 @@
+export interface RedirectInfo {
+  final_url: string;
+  redirect_count: number;
+  chain: string[];
+  status_codes: number[];
+}
+
+export interface Explanation {
+  method: string;
+  top_features: [string, number][];
+  summary: string;
+  redirect: RedirectInfo;
+}
+
 export interface AnalyzeResult {
   id: number;
   url: string;
   is_phishing: boolean;
-  explanation: string | null;
+  explanation: Explanation | null;
   travel: number;
   created_at: string;
   message: string;
 }
-
 
  
 //BE 연동용 코드
@@ -43,12 +56,11 @@ export const analyzeUrl = async (
 
   // ✅ 여기서 message 생성
   const message = data.is_phishing
-    ? "안전한 사이트입니다"
-    : "위험한 사이트일 수 있습니다";
+    ? "위험한 사이트일 수 있습니다"
+    : "안전한 사이트입니다.";
 
   return {
     ...data,
     message,
   };
 };
-
