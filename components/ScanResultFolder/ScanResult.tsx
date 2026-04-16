@@ -1,12 +1,7 @@
 import { useRouter } from "expo-router";
 import { Brain, GraduationCap, Shield, User } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Button } from "../../components/ui/button";
 import { addScanRecord, ScanRecord } from "../../data/scanRecords";
 import { XAI_EXPLANATIONS } from "../../data/xaiTexts";
@@ -20,8 +15,6 @@ interface ScanResultProps {
   url: string;
   onBack: () => void;
 }
-
-
 
 export function ScanResult({ url, onBack }: ScanResultProps) {
   const [result, setResult] = useState<AnalyzeResult | null>(null);
@@ -84,7 +77,6 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
   const currentExplanation = XAI_EXPLANATIONS[result.status][explanationLevel];
 
   return (
-    
     <View style={styles.container}>
       {/* 헤더 */}
       <View style={styles.header}>
@@ -100,7 +92,9 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
           <Text style={styles.statusText}>{result.message}</Text>
         </View>
 
-        <Card><Text>{url}</Text></Card>
+        <Card>
+          <Text>{url}</Text>
+        </Card>
 
         {/* 버튼 */}
         <TouchableOpacity
@@ -124,128 +118,134 @@ export function ScanResult({ url, onBack }: ScanResultProps) {
 
         {/* 안전할 때만 */}
         {result.status === "safe" && (
-  <TouchableOpacity
-    style={styles.primaryBtn}
-    onPress={() => {
-      router.push(`/WebViewScreen?url=${encodeURIComponent(url)}`);
-    }}
-  >
-    <Text style={{ color: "#fff" }}>보안 브라우저로 열기</Text>
-  </TouchableOpacity>
-)}
+          <TouchableOpacity
+            style={styles.primaryBtn}
+            onPress={() => {
+              // const targetUrl = url; // 원래 스캔한 URL
+              const targetUrl =
+                "https://swillhouse.com/venues/restaurant-hubert/"; // 발표용 하드코딩
+              router.push(
+                `/WebViewScreen?url=${encodeURIComponent(targetUrl)}`,
+              );
+            }}
+          >
+            <Text style={{ color: "#fff" }}>보안 브라우저로 열기</Text>
+          </TouchableOpacity>
+        )}
 
         {/* 위험 */}
         {result.status !== "safe" && (
           <View style={styles.warning}>
-            <Text style={{ color: "red" }}>
-              ⚠️ 위험할 수 있습니다
-            </Text>
+            <Text style={{ color: "red" }}>⚠️ 위험할 수 있습니다</Text>
           </View>
         )}
 
         <View style={styles.card}>
-      
-      {/* 헤더 */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Brain size={18} color="#2563eb" />
-          <Text style={styles.title}>AI 판단 근거</Text>
+          {/* 헤더 */}
+          <View style={styles.header}>
+            <View style={styles.headerLeft}>
+              <Brain size={18} color="#2563eb" />
+              <Text style={styles.title}>AI 판단 근거</Text>
+            </View>
+          </View>
+
+          {/* 버튼 */}
+          <View style={styles.levelContainer}>
+            {/* 쉽게 */}
+            <Button
+              onPress={() => setExplanationLevel("beginner")}
+              style={[
+                styles.levelBtn,
+                explanationLevel === "beginner" && styles.activeBtn,
+              ]}
+            >
+              <User
+                size={14}
+                color={explanationLevel === "beginner" ? "#2563eb" : "#6b7280"}
+              />
+              <Text
+                style={[
+                  styles.levelText,
+                  explanationLevel === "beginner" && styles.activeText,
+                ]}
+              >
+                쉽게
+              </Text>
+            </Button>
+
+            {/* 보통 */}
+            <Button
+              onPress={() => setExplanationLevel("intermediate")}
+              style={[
+                styles.levelBtn,
+                explanationLevel === "intermediate" && styles.activeBtn,
+              ]}
+            >
+              <GraduationCap
+                size={14}
+                color={
+                  explanationLevel === "intermediate" ? "#2563eb" : "#6b7280"
+                }
+              />
+              <Text
+                style={[
+                  styles.levelText,
+                  explanationLevel === "intermediate" && styles.activeText,
+                ]}
+              >
+                보통
+              </Text>
+            </Button>
+
+            {/* 전문가 */}
+            <Button
+              onPress={() => setExplanationLevel("expert")}
+              style={[
+                styles.levelBtn,
+                explanationLevel === "expert" && styles.activeBtn,
+              ]}
+            >
+              <Shield
+                size={14}
+                color={explanationLevel === "expert" ? "#2563eb" : "#6b7280"}
+              />
+              <Text
+                style={[
+                  styles.levelText,
+                  explanationLevel === "expert" && styles.activeText,
+                ]}
+              >
+                전문가
+              </Text>
+            </Button>
+          </View>
+
+          {/* 설명 */}
+          <View style={styles.explainBox}>
+            <Text style={styles.explainTitle}>{currentExplanation.title}</Text>
+
+            {currentExplanation.points.map((point, i) => (
+              <Text key={i} style={styles.point}>
+                {point}
+              </Text>
+            ))}
+          </View>
+
+          {/* 조언 */}
+          <View
+            style={[
+              styles.adviceBox,
+              result.status === "safe" && styles.safe,
+              result.status === "suspicious" && styles.suspicious,
+              result.status === "malicious" && styles.danger,
+            ]}
+          >
+            <Text style={styles.adviceText}>
+              💡 {currentExplanation.advice}
+            </Text>
+          </View>
         </View>
-      </View>
-
-      {/* 버튼 */}
-      <View style={styles.levelContainer}>
-        
-        {/* 쉽게 */}
-        <Button
-          onPress={() => setExplanationLevel("beginner")}
-          style={[
-            styles.levelBtn,
-            explanationLevel === "beginner" && styles.activeBtn
-          ]}
-        >
-          <User
-            size={14}
-            color={explanationLevel === "beginner" ? "#2563eb" : "#6b7280"}
-          />
-          <Text style={[
-            styles.levelText,
-            explanationLevel === "beginner" && styles.activeText
-          ]}>
-            쉽게
-          </Text>
-        </Button>
-
-        {/* 보통 */}
-        <Button
-          onPress={() => setExplanationLevel("intermediate")}
-          style={[
-            styles.levelBtn,
-            explanationLevel === "intermediate" && styles.activeBtn
-          ]}
-        >
-          <GraduationCap
-            size={14}
-            color={explanationLevel === "intermediate" ? "#2563eb" : "#6b7280"}
-          />
-          <Text style={[
-            styles.levelText,
-            explanationLevel === "intermediate" && styles.activeText
-          ]}>
-            보통
-          </Text>
-        </Button>
-
-        {/* 전문가 */}
-        <Button
-          onPress={() => setExplanationLevel("expert")}
-          style={[
-            styles.levelBtn,
-            explanationLevel === "expert" && styles.activeBtn
-          ]}
-        >
-          <Shield
-            size={14}
-            color={explanationLevel === "expert" ? "#2563eb" : "#6b7280"}
-          />
-          <Text style={[
-            styles.levelText,
-            explanationLevel === "expert" && styles.activeText
-          ]}>
-            전문가
-          </Text>
-        </Button>
-      </View>
-
-      {/* 설명 */}
-      <View style={styles.explainBox}>
-        <Text style={styles.explainTitle}>
-          {currentExplanation.title}
-        </Text>
-
-        {currentExplanation.points.map((point, i) => (
-          <Text key={i} style={styles.point}>
-            {point}
-          </Text>
-        ))}
-      </View>
-
-      {/* 조언 */}
-      <View style={[
-        styles.adviceBox,
-        result.status === "safe" && styles.safe,
-        result.status === "suspicious" && styles.suspicious,
-        result.status === "malicious" && styles.danger,
-      ]}>
-        <Text style={styles.adviceText}>
-          💡 {currentExplanation.advice}
-        </Text>
-      </View>
-    </View>
-        
       </ScrollView>
-
-
     </View>
   );
 }
