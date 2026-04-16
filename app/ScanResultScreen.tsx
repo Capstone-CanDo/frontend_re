@@ -21,7 +21,6 @@ export default function ScanResultScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
-      {/* Stack 옵션 */}
       <Stack.Screen options={{ title: "큐트래블", headerShown: false }} />
       <ScanResult url={url} onBack={handleBack} />
     </View>
