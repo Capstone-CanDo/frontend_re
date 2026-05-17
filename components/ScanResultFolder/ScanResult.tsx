@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
-import { Brain, Copy } from "lucide-react-native";
+import { Sparkles } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -13,9 +13,14 @@ import {
   View
 } from "react-native";
 import { XAI_EXPLANATIONS } from "../../data/xaiTexts";
-import { AnalyzeResult, analyzeUrl } from "../../util/urlAnaylze";
+import { AnalyzeResult, analyzeUrl, Explanation } from "../../util/urlAnaylze";
 import { validateUrl } from "../../util/UrlValid";
+import DangerResultCard from "./DangerResultCard";
+import SafeRedirectLog from "./Saferedirectlog";
+import SafeResultCard from "./SafeResultCard";
 import { styles } from "./styles";
+import XaiDangerCard from "./XaiDangerCard";
+import XaiSafeCard from "./XaiSafeCard";
 
 interface ScanResultProps {
   url: string;
@@ -27,6 +32,8 @@ interface ScanResultProps {
 export function ScanResult({ url, onBack }: ScanResultProps) {
   
   const [result, setResult] = useState<AnalyzeResult | null>(null);
+  const [XaiExplanation, setXaiExplanation] = 
+  useState<Explanation | null>(null);
   const [showRedirects, setShowRedirects] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -136,155 +143,98 @@ return (<View style={styles.errorcontainer}>
     
     <View style={styles.container}>
       {/* 헤더 */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={onBack}>
-          <Text style={styles.back}>←</Text>
-        </TouchableOpacity>
-        <Image
-      source={require("../../assets/images/Qtravel_logo.png")}
-     style={styles.logo} // 스타일로 크기 조절 가능
-     resizeMode="contain" // 이미지 비율 유지
-  />
-      </View>
-
-      <ScrollView contentContainerStyle={styles.content}>
-        {/* 상태 */}
-        <View
-  style={[
-    styles.statusCard,
-    status === "safe" && styles.safeCard,
-    status === "malicious" && styles.maliciousCard,
-  ]}
->
-  <View style={[styles.iconWrapper,
-    status === "safe" && styles.safeiconWrapper,
-    status === "malicious" && styles.maliciousiconWrapper,
-  ]}>
-        <Ionicons
-           name="link-outline"
-           size={20}
-           color={
-            status === "safe"
-            ? "#008236"
-           : status === "malicious"
-            ? "#C10007"
-            : "#999" // optional (suspicious 등)
-  }
-/>
-      </View>
-  <Text
-    style={[
-      styles.statusText,
-      status === "safe" && styles.safeText,
-      status === "malicious" && styles.maliciousText,
-    ]}
+<View style={styles.header}>
+  <TouchableOpacity
+    onPress={onBack}
+    style={styles.headerBackButton}
   >
-    {result.message}
-  </Text>
-</View>
-
-
-        {/* 버튼 */}
-        <TouchableOpacity
-  style={styles.resultButton}
-  onPress={() => setShowRedirects(!showRedirects)}
->
-  {/* 왼쪽 영역: 돋보기 아이콘 + 텍스트 */}
-  <View style={styles.leftContent}>
     <Ionicons
-      name="search-outline"
+      name="chevron-back"
       size={20}
-      color="#4A6CF7"
-      style={styles.searchIcon}
+      color="#4B5274"
     />
-    <Text style={styles.resultText}>URL 결과</Text>
-  </View>
+  </TouchableOpacity>
 
-  {/* 오른쪽 영역: 드롭다운 아이콘 */}
-  <Ionicons
-    name={showRedirects ? "chevron-up-outline" : "chevron-down-outline"}
-    size={20}
-    color="#6B7280"
-  />
-</TouchableOpacity>
+  <Text style={styles.headerTitle}>
+    스캔 결과
+  </Text>
 
-        {/* 리다이렉션 */}
-        {showRedirects && (
-          <View style={styles.card}>
-            <Text>리다이렉션 정보 (예시)</Text>
-            <Text>{url}</Text>
-          </View>
-        )}
-
-        <TouchableOpacity style={styles.button} onPress={handleCopy}>
-          <View style={styles.leftContent}>
-    <Copy size={20} color="#6B7280" style={{ marginRight: 8 }} />
-    <Text style={styles.resultText}>{copied ? "복사됨!" : "URL 복사"}</Text>
-  </View>
-        </TouchableOpacity>
-
-        
-
-        {/* 안전할 때만 */}
+  {/* 오른쪽 공간 맞춤용 */}
+  <View style={{ width: 36 }} />
+</View>
+      {/* 안전할 때만 */}
         {status === "safe" && (
   <TouchableOpacity
-    style={styles.primaryBtn}
+    style={styles.floatingButton}
     onPress={() => {
       router.push(`/WebViewScreen?url=${encodeURIComponent(url)}`);
     }}
   >
-    <Text style={{ color: "#fff"}}>보안 브라우저로 열기</Text>
+    <Text style={styles.securityButtonText}>
+      보안 브라우저로 열기
+    </Text>
   </TouchableOpacity>
 )}
 
-        {/* 위험 */}
-        {status !== "safe" && (
-          <View style={styles.warning}>
-            <Text style={{ color: "red" }}>
-              ⚠️ 위험할 수 있습니다
-            </Text>
-          </View>
-        )}
+      <ScrollView contentContainerStyle={styles.content}>
+        
+        {status === "safe" && <SafeResultCard />}
+
+        {status === "malicious" && <DangerResultCard />}
 
 
-      <View style = {styles.xaicontainer}>
-      {/* 헤더 */}
-      <View style={styles.xaiheader}>
-        <View style={styles.headerLeft}>
-          <Brain size={18} color="#2563eb" />
-          <Text style={styles.title}>AI 판단 근거</Text>
-        </View>
-      </View>
+       
+
+        {result.explanation?.redirect && (
+  <SafeRedirectLog
+    redirect={{
+      ...result.explanation.redirect,
+      status,
+    }}
+  />
+)}
+        
       
-
-      {/* 설명 */}
-      <View style={styles.explainBox}>
-        <Text style={styles.explainTitle}>
-          {currentExplanation.title}
-        </Text>
-
-        {currentExplanation.points.map((point, i) => (
-          <Text key={i} style={styles.point}>
-            {point}
-          </Text>
-        ))}
-      </View>
+      <View style={styles.xaicontainer}>
+      {/* Header */}
+      <View style={styles.headerRow}>
+        <View style={styles.iconBox}>
+          <Sparkles size={16} color="#404040" />
         </View>
-      {/* 조언 */}
-      <View style={[
-        styles.adviceBox,
-        status === "safe" && styles.safe,
-        status === "malicious" && styles.danger,
-      ]}>
-        <Text style={styles.adviceText}>
-          💡 {currentExplanation.advice}
-        </Text>
+        <Text style={styles.xaititle}>AI 판단 근거</Text>
+        
+      </View>
+      {status === "safe" && <XaiSafeCard
+  title={
+    "피싱 패턴 미탐지"
+  }
+  reasons={
+    result.explanation?.parsedSummary?.outputs ?? []
+  }
+  safeText={result.explanation?.parsedSummary?.reason ??
+    "안전한 사이트로 판단되었어요."
+  }
+/>}
+
+      {status === "malicious" && (
+  <XaiDangerCard
+  title={
+    "피싱 패턴 다수 탐지"
+  }
+  reasons={
+    result.explanation?.parsedSummary?.outputs ?? []
+  }
+  warningText={result.explanation?.parsedSummary?.reason ??
+    "피싱 위험 요소가 발견되었어요."}
+/>)}
 
     </View>
-        
+
+      
+         
       </ScrollView>
 
-
+      
     </View>
   );
   }
