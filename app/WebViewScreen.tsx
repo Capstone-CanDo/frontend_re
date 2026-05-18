@@ -5,7 +5,7 @@ import {
   Switch,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { WebView } from "react-native-webview";
@@ -43,6 +43,9 @@ export default function WebViewScreen() {
 
   const path =
     cleanUrl.replace(domain, "") || "/";
+
+  const [currentUrl, setCurrentUrl] =
+  useState(safeUrl);
 
   return (
     <View
@@ -199,24 +202,23 @@ export default function WebViewScreen() {
       {/* ================= WEBVIEW ================= */}
       <View style={styles.webviewContainer}>
         <WebView
-          key={jsEnabled ? "js-on" : "js-off"}
-          ref={webviewRef}
-          source={{ uri: safeUrl }}
-          javaScriptEnabled={jsEnabled}
-          domStorageEnabled={jsEnabled}
-          onNavigationStateChange={(
-            navState
-          ) => {
-            setCanGoBack(
-              navState.canGoBack
-            );
-          }}
-        />
+  key={jsEnabled ? "js-on" : "js-off"}
+  ref={webviewRef}
+  source={{ uri: safeUrl }}
+  javaScriptEnabled={jsEnabled}
+  domStorageEnabled={jsEnabled}
+  setSupportMultipleWindows={false}
+  onNavigationStateChange={(navState) => {
+    setCanGoBack(navState.canGoBack);
+    setCurrentUrl(navState.url);
+  }}
+/>
       </View>
 
       {/* ================= BOTTOM SHEET ================= */}
       <BrowserBottomSheet
         bottomInset={insets.bottom}
+        url = {currentUrl}
       />
     </View>
   );

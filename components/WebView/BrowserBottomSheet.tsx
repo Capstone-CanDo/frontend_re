@@ -1,8 +1,5 @@
-import {
-  Globe,
-  ShieldAlert,
-} from "lucide-react-native";
 import React, {
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -16,18 +13,29 @@ import {
   View,
 } from "react-native";
 
-const COLLAPSED_HEIGHT = 80; 
-const EXPANDED_HEIGHT = 400; 
-const DRAG_THRESHOLD = 200;
+import RiskAnalysisLoadingCard from "./RiskAnalysisLoadingCard";
+import RiskAnalysisResultCard from "./RiskAnalysisResultCard";
+
+import RiskBuyResultCard from "./RiskBuyResultCard";
+import TranslationBuyScreen from "./TranslationBuyScreen";
+import TranslationGiftcard from "./TranslationGiftcard";
+import TranslationLoadingCard from "./TranslationLoadingCard";
+import TranslationResultScreen from "./TranslationResultScreen";
+
+const COLLAPSED_HEIGHT = 80;
+const EXPANDED_HEIGHT = 500;
+const DRAG_THRESHOLD = 300;
 
 type Tab = "translate" | "warning";
 
 type BrowserBottomSheetProps = {
   bottomInset?: number;
+  url: string;
 };
 
 export function BrowserBottomSheet({
   bottomInset = 0,
+  url,
 }: BrowserBottomSheetProps) {
   const [isExpanded, setIsExpanded] =
     useState(false);
@@ -35,13 +43,61 @@ export function BrowserBottomSheet({
   const [activeTab, setActiveTab] =
     useState<Tab>("translate");
 
+  // 로딩 여부
+  const [isLoading, setIsLoading] =
+    useState(true);
+
+  const timerRef = useRef<
+    ReturnType<typeof setTimeout> | null
+  >(null);
+
   const translateY = useRef(
     new Animated.Value(
-      EXPANDED_HEIGHT - COLLAPSED_HEIGHT
+      EXPANDED_HEIGHT -
+        COLLAPSED_HEIGHT
     )
   ).current;
 
-  const snapTo = (expanded: boolean) => {
+  // URL 판별
+  const isGiftcardPage =
+    url == "https://swillhouse.wrapped.store/gift-card/restaurant-hubert-gift-card";
+
+  const isCheckoutPage =
+    url == "https://swillhouse.com/venues/restaurant-hubert/";
+
+
+  const isBuyPage = 
+   url == "https://swillhouse.wrapped.store/checkout";
+  // 모달 열릴 때마다
+  // 3초 로딩 시작
+  useEffect(() => {
+    if (!isExpanded) return;
+
+    setIsLoading(true);
+
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    timerRef.current = setTimeout(
+      () => {
+        setIsLoading(false);
+      },
+      3000
+    );
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(
+          timerRef.current
+        );
+      }
+    };
+  }, [isExpanded, activeTab, url]);
+
+  const snapTo = (
+    expanded: boolean
+  ) => {
     Animated.spring(translateY, {
       toValue: expanded
         ? 0
@@ -59,17 +115,20 @@ export function BrowserBottomSheet({
     PanResponder.create({
       onMoveShouldSetPanResponder:
         (_, gestureState) =>
-          Math.abs(gestureState.dy) > 5,
+          Math.abs(
+            gestureState.dy
+          ) > 5,
 
       onPanResponderMove: (
         _,
         gestureState
       ) => {
-        const newValue = isExpanded
-          ? gestureState.dy
-          : EXPANDED_HEIGHT -
-              COLLAPSED_HEIGHT +
-            gestureState.dy;
+        const newValue =
+          isExpanded
+            ? gestureState.dy
+            : EXPANDED_HEIGHT -
+                COLLAPSED_HEIGHT +
+              gestureState.dy;
 
         if (
           newValue >= 0 &&
@@ -77,7 +136,9 @@ export function BrowserBottomSheet({
             EXPANDED_HEIGHT -
               COLLAPSED_HEIGHT
         ) {
-          translateY.setValue(newValue);
+          translateY.setValue(
+            newValue
+          );
         }
       },
 
@@ -108,18 +169,19 @@ export function BrowserBottomSheet({
         styles.container,
         {
           bottom: bottomInset,
-          transform: [{ translateY }],
+          transform: [
+            { translateY },
+          ],
         },
       ]}
     >
-      {/* HANDLE + TABS */}
+      {/* HEADER */}
       <View
         style={styles.handleArea}
         {...panResponder.panHandlers}
       >
         <View style={styles.handle} />
 
-        {/* Tabs */}
         <View style={styles.tabWrapper}>
           {/* 번역 */}
           <TouchableOpacity
@@ -134,8 +196,9 @@ export function BrowserBottomSheet({
                 "translate"
               );
 
-              if (!isExpanded)
+              if (!isExpanded) {
                 snapTo(true);
+              }
             }}
           >
             <Text
@@ -159,10 +222,13 @@ export function BrowserBottomSheet({
                 styles.activeTab,
             ]}
             onPress={() => {
-              setActiveTab("warning");
+              setActiveTab(
+                "warning"
+              );
 
-              if (!isExpanded)
+              if (!isExpanded) {
                 snapTo(true);
+              }
             }}
           >
             <Text
@@ -181,47 +247,25 @@ export function BrowserBottomSheet({
 
       {/* CONTENT */}
       <View style={styles.content}>
-        {activeTab === "translate" ? (
-          <>
-            <View style={styles.iconBox}>
-              <Globe
-                size={20}
-                color="#4338CA"
-              />
-            </View>
-
-            <Text style={styles.title}>
-              번역 기능 준비 중
-            </Text>
-
-            <Text
-              style={styles.description}
-            >
-              페이지 로드 후{"\n"}
-              자동으로 번역됩니다
-            </Text>
-          </>
-        ) : (
-          <>
-            <View style={styles.iconBox}>
-              <ShieldAlert
-                size={20}
-                color="#4338CA"
-              />
-            </View>
-
-            <Text style={styles.title}>
-              위험 요소 분석 준비 중
-            </Text>
-
-            <Text
-              style={styles.description}
-            >
-              페이지 로드 후{"\n"}
-              자동으로 위험 요소를
-              분석합니다
-            </Text>
-          </>
+        {activeTab ===
+        "translate" ? (
+          isLoading ? (
+            <TranslationLoadingCard />
+          ) : isGiftcardPage ? (
+            <TranslationGiftcard />
+          ) : isBuyPage ? (
+            <TranslationBuyScreen/>
+          ) : (
+            <TranslationResultScreen />
+          )
+        ) : isLoading ? (
+          <RiskAnalysisLoadingCard />
+        ) : isCheckoutPage ? (
+          <RiskAnalysisResultCard />
+        ) : isBuyPage ? (
+          <RiskBuyResultCard/>
+        ) :  (
+          <RiskAnalysisResultCard />
         )}
       </View>
     </Animated.View>
@@ -231,7 +275,6 @@ export function BrowserBottomSheet({
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-
     left: 0,
     right: 0,
 
@@ -241,17 +284,6 @@ const styles = StyleSheet.create({
 
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-
-    shadowColor: "#4338CA",
-    shadowOffset: {
-      width: 0,
-      height: -6,
-    },
-
-    shadowOpacity: 0.08,
-    shadowRadius: 30,
-
-    elevation: 10,
   },
 
   handleArea: {
@@ -295,24 +327,11 @@ const styles = StyleSheet.create({
 
   activeTab: {
     backgroundColor: "#FFFFFF",
-
-    shadowColor: "#4338CA",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-
-    shadowOpacity: 0.13,
-    shadowRadius: 8,
-
-    elevation: 3,
   },
 
   tabText: {
     fontSize: 12,
     fontWeight: "500",
-
-    lineHeight: 18,
 
     color: "#9097B8",
   },
@@ -324,46 +343,5 @@ const styles = StyleSheet.create({
 
   content: {
     flex: 1,
-
-    justifyContent: "center",
-    alignItems: "center",
-
-    paddingBottom: 24,
-  },
-
-  iconBox: {
-    width: 40,
-    height: 40,
-
-    borderRadius: 14,
-
-    backgroundColor: "#EEF2FF",
-
-    justifyContent: "center",
-    alignItems: "center",
-
-    marginBottom: 12,
-  },
-
-  title: {
-    fontSize: 13,
-    fontWeight: "700",
-
-    lineHeight: 20,
-
-    color: "#4B5274",
-
-    marginBottom: 4,
-  },
-
-  description: {
-    fontSize: 11,
-    fontWeight: "400",
-
-    lineHeight: 18,
-
-    textAlign: "center",
-
-    color: "#9097B8",
   },
 });
