@@ -35,9 +35,9 @@ const XaiSafeCard = ({
       {/* Safe Box */}
       <View style={styles.safeBox}>
         <Text style={styles.safeText}>
-          {safeText ??
-            "안심하고 방문하셔도 괜찮아요. 다만 개인정보 입력 시에는 항상 주의하세요."}
-        </Text>
+  {safeText?.trim() ||
+    "안심하고 방문하셔도 괜찮아요. 다만 개인정보 입력 시에는 항상 주의하세요."}
+</Text>
       </View>
 
     </View>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
 
   safeBox: {
-    backgroundColor: "#DEF4ED",
+    backgroundColor: "#E8FFF0",
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 12,
@@ -91,6 +91,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 19,
     fontWeight: "500",
-    color: "#0D553F",
+    color: "#075121",
   },
 });

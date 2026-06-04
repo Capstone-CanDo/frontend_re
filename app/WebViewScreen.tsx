@@ -144,8 +144,8 @@ export default function WebViewScreen() {
           styles.jsCard,
           {
             backgroundColor: jsEnabled
-              ? "#C86D3E"
-              : "#5D57A9",
+              ? "#154FFC"
+              : "#154FFC",
           },
         ]}
       >
@@ -166,14 +166,14 @@ export default function WebViewScreen() {
             <View>
               <Text style={styles.jsTitle}>
                 {jsEnabled
-                  ? "자바스크립트 활성화"
-                  : "안전 미리보기 모드"}
+                  ? "보안 브라우저 비활성화"
+                  : "보안 브라우저 활성화"}
               </Text>
 
               <Text style={styles.jsSub}>
                 {jsEnabled
                   ? "모든 기능이 작동합니다"
-                  : "스크립트가 차단된 상태입니다"}
+                  : "기능이 일부 차단된 상태입니다"}
               </Text>
             </View>
           </View>
@@ -192,8 +192,8 @@ export default function WebViewScreen() {
             }}
             thumbColor={
               jsEnabled
-                ? "#C86D3E"
-                : "#FFFFFF"
+                ? "#154FFC"
+                : "#154FFC"
             }
           />
         </View>

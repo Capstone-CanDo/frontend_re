@@ -25,8 +25,8 @@ export default SafeResultCard;
 
 const styles = StyleSheet.create({
   container: {
-    height: 229,
-    backgroundColor: "#578375",
+    height: 149,
+    backgroundColor: "#56C97E",
     borderRadius: 24,
     alignSelf: "stretch",
     position: "relative",
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 321,
     height: 17,
-    top: 116,
+    top: 36,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 321,
     height: 33,
-    top: 140,
+    top: 60,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 321,
     height: 20,
-    top: 181,
+    top: 101,
     justifyContent: "center",
     alignItems: "center",
   },

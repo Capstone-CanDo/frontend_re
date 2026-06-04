@@ -1,9 +1,9 @@
 import React from "react";
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 export default function RiskBuyResultCard() {
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
 
     borderRadius: 14,
 
-    backgroundColor: "#F7E2E2",
+    backgroundColor: "#FBEAEA",
 
     justifyContent: "center",
     alignItems: "center",

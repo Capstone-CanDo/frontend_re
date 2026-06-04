@@ -1,368 +1,111 @@
-import { ArrowRightLeft } from "lucide-react-native";
 import React from "react";
-import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-export default function TranslationBuyScreen() {
+const summaryItems = [
+  "레스토랑 휴버트 기프트 카드 결제 페이지입니다.", 
+  "이름, 이메일 등 개인 정보와 카드 정보를 입력해 결제를 진행합니다.",
+  "배송은 디지털(무료 즉시 발송) 또는 실물 우편($10, 호주 내 배송) 중 선택할 수 있습니다.", 
+  "결제 금액은 $50.00입니다."
+];
+
+export default function PageSummaryCard() {
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{
-        paddingBottom: 40,
-      }}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* TOP */}
-      <View style={styles.topRow}>
-        <View style={styles.languageRow}>
-          <View style={styles.langBox}>
-            <Text style={styles.langText}>
-              EN
-            </Text>
-          </View>
-
-          <ArrowRightLeft
-            size={13}
-            color="#9097B8"
-          />
-
-          <View style={styles.langBox}>
-            <Text style={styles.langText}>
-              한국어
-            </Text>
-          </View>
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>페이지 요약</Text>
         </View>
 
-        <View style={styles.countBox}>
-          <Text style={styles.countText}>
-            9문장
-          </Text>
-        </View>
-      </View>
-
-      {/* PAGE TITLE */}
-      <SectionTitle title="페이지 제목" />
-
-      <View style={styles.titleCard}>
-        <Text style={styles.originalText}>
-          Checkout
-        </Text>
-
-        <Text style={styles.translatedTitle}>
-          결제
+        <Text style={styles.countText}>
+          {summaryItems.length}개 핵심 정보
         </Text>
       </View>
 
-      {/* 개인정보 */}
-      <SectionTitle title="개인 정보" />
-
-      <View style={styles.fieldList}>
-        <FieldCard
-          original="First name"
-          translated="이름"
-        />
-
-        <FieldCard
-          original="Last name"
-          translated="성"
-        />
-
-        <FieldCard
-          original="Email"
-          translated="이메일 주소"
-        />
+      {/* Summary List */}
+      <View style={styles.content}>
+        {summaryItems.map((item, index) => (
+          <View key={index} style={styles.bulletRow}>
+            <Text style={styles.bullet}>•</Text>
+            <Text style={styles.summaryText}>{item}</Text>
+          </View>
+        ))}
       </View>
 
-      {/* 결제 정보 */}
-      <SectionTitle title="결제 정보" />
-
-      <View style={styles.fieldList}>
-        <WarningFieldCard
-          original="Card number"
-          translated="카드 번호"
-        />
-
-        <WarningFieldCard
-          original="Expiry date"
-          translated="카드 만료일"
-        />
-
-        <WarningFieldCard
-          original="CVC / Security code"
-          translated="보안 코드 (CVC)"
-        />
-      </View>
-
-      {/* 버튼 */}
-      <SectionTitle title="버튼" />
-
-      <View style={styles.fieldList}>
-        <SafeFieldCard
-          original="Pay now"
-          translated="바로 구매하기"
-        />
-
-        <SafeFieldCard
-          original="Your payment information is secure and encrypted"
-          translated="결제 정보는 암호화로 보호됩니다"
-        />
-      </View>
-
-      {/* FOOTER */}
+      {/* Footer */}
       <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          총 9문장 번역 완료
-        </Text>
+        <Text style={styles.footerText}>AI 요약 제공</Text>
 
         <View style={styles.dot} />
 
-        <Text style={styles.footerText}>
-          Google Translate
-        </Text>
+        <Text style={styles.footerText}>Google Translate</Text>
       </View>
-    </ScrollView>
-  );
-}
-
-function SectionTitle({
-  title,
-}: {
-  title: string;
-}) {
-  return (
-    <View style={styles.sectionHeader}>
-      <Text style={styles.sectionTitle}>
-        {title}
-      </Text>
-
-      <View style={styles.line} />
-    </View>
-  );
-}
-
-function FieldCard({
-  original,
-  translated,
-}: {
-  original: string;
-  translated: string;
-}) {
-  return (
-    <View style={styles.fieldCard}>
-      <Text style={styles.fieldOriginal}>
-        {original}
-      </Text>
-
-      <Text style={styles.fieldTranslated}>
-        {translated}
-      </Text>
-    </View>
-  );
-}
-
-function WarningFieldCard({
-  original,
-  translated,
-}: {
-  original: string;
-  translated: string;
-}) {
-  return (
-    <View style={styles.warningCard}>
-      <Text style={styles.fieldOriginal}>
-        {original}
-      </Text>
-
-      <Text style={styles.warningText}>
-        {translated}
-      </Text>
-    </View>
-  );
-}
-
-function SafeFieldCard({
-  original,
-  translated,
-}: {
-  original: string;
-  translated: string;
-}) {
-  return (
-    <View style={styles.safeCard}>
-      <Text style={styles.fieldOriginal}>
-        {original}
-      </Text>
-
-      <Text style={styles.safeText}>
-        {translated}
-      </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingHorizontal: 16,
     paddingTop: 14,
+    paddingHorizontal: 16,
+    paddingBottom: 24,
   },
 
-  topRow: {
+  header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 12,
   },
 
-  languageRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-
-  langBox: {
-    height: 32,
-    paddingHorizontal: 12,
-    borderRadius: 8,
+  badge: {
     backgroundColor: "#EEF2FF",
-    justifyContent: "center",
-    alignItems: "center",
+    borderRadius: 10,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
   },
 
-  langText: {
+  badgeText: {
     fontSize: 11,
     fontWeight: "700",
     color: "#4338CA",
-  },
-
-  countBox: {
-    height: 30,
-    paddingHorizontal: 14,
-    borderRadius: 20,
-    backgroundColor: "#EEF2FF",
-    justifyContent: "center",
-    alignItems: "center",
   },
 
   countText: {
     fontSize: 11,
-    fontWeight: "700",
+    color: "#6B7280",
+  },
+
+  content: {
+    marginTop: 12,
+    gap: 10,
+  },
+
+  bulletRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
+
+  bullet: {
+    width: 14,
+    fontSize: 16,
+    lineHeight: 23,
     color: "#4338CA",
   },
 
-  sectionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    marginBottom: 8,
-    marginTop: 6,
-  },
-
-  sectionTitle: {
-    fontSize: 10,
-    fontWeight: "800",
-    letterSpacing: 0.7,
-    textTransform: "uppercase",
-    color: "#9097B8",
-  },
-
-  line: {
+  summaryText: {
     flex: 1,
-    height: 1,
-    backgroundColor: "#ECEDF5",
-  },
-
-  titleCard: {
-    backgroundColor: "#EEF2FF",
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingTop: 12,
-    paddingBottom: 14,
-    marginBottom: 12,
-  },
-
-  originalText: {
-    fontSize: 11,
-    color: "#9097B8",
-    marginBottom: 4,
-  },
-
-  translatedTitle: {
     fontSize: 14,
-    fontWeight: "800",
-    color: "#1E1B4B",
-  },
-
-  fieldList: {
-    gap: 5,
-    marginBottom: 12,
-  },
-
-  fieldCard: {
-    backgroundColor: "#F9FAFB",
-    borderLeftWidth: 2.5,
-    borderLeftColor: "#EEF2FF",
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingTop: 9,
-    paddingBottom: 12,
-  },
-
-  warningCard: {
-    backgroundColor: "#FEF6ED",
-    borderLeftWidth: 2.5,
-    borderLeftColor: "#F6D7B4",
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingTop: 9,
-    paddingBottom: 12,
-  },
-
-  safeCard: {
-    backgroundColor: "#ECF9F5",
-    borderLeftWidth: 2.5,
-    borderLeftColor: "#C7E7DD",
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingTop: 9,
-    paddingBottom: 12,
-  },
-
-  fieldOriginal: {
-    fontSize: 11,
-    color: "#9CA3AF",
-    marginBottom: 2,
-  },
-
-  fieldTranslated: {
-    fontSize: 13,
-    fontWeight: "600",
+    fontWeight: "500",
+    lineHeight: 23,
     color: "#111827",
   },
 
-  warningText: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: "#9D5F19",
-  },
-
-  safeText: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: "#0D553F",
-  },
-
   footer: {
+    marginTop: 12,
+    paddingTop: 8,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 6,
-    marginTop: 4,
-    marginBottom: 20,
   },
 
   footerText: {
@@ -373,7 +116,8 @@ const styles = StyleSheet.create({
   dot: {
     width: 3,
     height: 3,
-    borderRadius: 2,
+    borderRadius: 1.5,
     backgroundColor: "#D1D5DB",
+    marginHorizontal: 6,
   },
 });

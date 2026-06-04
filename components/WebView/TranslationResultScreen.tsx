@@ -1,352 +1,124 @@
-import { ArrowRight } from "lucide-react-native";
 import React from "react";
-import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-const introItems = [
-  {
-    en: "Fine dining experience in the heart of Sydney",
-    ko: "시드니 중심부에 파인 다이닝 경험",
-  },
-  {
-    en: "Award-winning cuisine since 2017",
-    ko: "2017년부터 수상 경력에 빛나는 요리",
-  },
-  {
-    en: "Open Tuesday to Sunday, 6pm onwards",
-    ko: "화요일부터 일요일, 오후 6시부터 운영",
-  },
-  {
-    en: "Private dining rooms available for events",
-    ko: "이벤트를 위한 프라이빗 다이닝룸 이용 가능",
-  },
+const summaryItems = [
+  "시드니 CBD 지하에 자리한 프랑스 파인다이닝 레스토랑 위베르(Hubert)의 공식 안내 페이지입니다.",
+  "고풍스러운 파리 분위기 속 촛불과 매일 저녁 라이브 재즈 공연이 어우러집니다.",
+  "XO 버터 에스카르고, 오리 오 랑주, 김치 그라탱 등 시즌마다 바뀌는 메뉴를 제공합니다.",
+  "점심 매일 낮 12시~, 저녁 오후 5시~늦게까지 운영하며 주소는 15 Bligh St, Sydney입니다.",
+  "예약, 기프트 카드 구매, 프라이빗 이벤트 문의도 이 페이지에서 가능합니다.",
 ];
 
-const menuItems = [
-  {
-    en: "Seasonal menu updated monthly",
-    ko: "매월 업데이트되는 시즌 메뉴",
-  },
-  {
-    en: "Vegetarian and vegan options available",
-    ko: "채식주의자 및 비건 메뉴 이용 가능",
-  },
-  {
-    en: "Curated wine list featuring local producers",
-    ko: "지역 생산자를 중심으로 엄선한 와인 리스트",
-  },
-];
-
-const buttonItems = [
-  {
-    en: "Book your table now",
-    ko: "지금 바로 테이블 예약하기",
-  },
-  {
-    en: "View full menu",
-    ko: "전체 메뉴 보기",
-  },
-  {
-    en: "Purchase a gift card",
-    ko: "기프트카드 구매하기",
-  },
-];
-
-const SectionHeader = ({ title }: { title: string }) => (
-  <View style={styles.sectionHeader}>
-    <Text style={styles.sectionTitle}>{title}</Text>
-    <View style={styles.divider} />
-  </View>
-);
-
-const TranslationCard = ({
-  en,
-  ko,
-  green = false,
-}: {
-  en: string;
-  ko: string;
-  green?: boolean;
-}) => (
-  <View
-    style={[
-      styles.card,
-      green ? styles.greenCard : styles.purpleCard,
-    ]}
-  >
-    <Text style={styles.enText}>{en}</Text>
-    <Text
-      style={[
-        styles.koText,
-        green && styles.greenKoText,
-      ]}
-    >
-      {ko}
-    </Text>
-  </View>
-);
-
-export default function TranslationResultScreen() {
+export default function PageSummaryCard() {
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Top Bar */}
-      <View style={styles.topBar}>
-        <View style={styles.languageRow}>
-          <View style={styles.languageChip}>
-            <Text style={styles.chipText}>EN</Text>
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>페이지 요약</Text>
+        </View>
+
+        <Text style={styles.countText}>
+          {summaryItems.length}개 핵심 정보
+        </Text>
+      </View>
+
+      {/* Summary List */}
+      <View style={styles.content}>
+        {summaryItems.map((item, index) => (
+          <View key={index} style={styles.bulletRow}>
+            <Text style={styles.bullet}>•</Text>
+            <Text style={styles.summaryText}>{item}</Text>
           </View>
-
-          <ArrowRight
-            size={14}
-            color="#9097B8"
-            strokeWidth={1.8}
-          />
-
-          <View style={styles.languageChip}>
-            <Text style={styles.chipText}>한국어</Text>
-          </View>
-        </View>
-
-        <View style={styles.countChip}>
-          <Text style={styles.chipText}>11문장</Text>
-        </View>
-      </View>
-
-      {/* Restaurant Title */}
-      <View style={styles.section}>
-        <SectionHeader title="레스토랑 제목" />
-
-        <View style={styles.titleCard}>
-          <Text style={styles.enText}>
-            Welcome to Restaurant Hubert
-          </Text>
-
-          <Text style={styles.titleKo}>
-            레스토랑 휴버트에 오신 것을 환영합니다
-          </Text>
-        </View>
-      </View>
-
-      {/* Intro */}
-      <View style={styles.section}>
-        <SectionHeader title="소개 문구" />
-
-        <View style={styles.cardList}>
-          {introItems.map((item, index) => (
-            <TranslationCard
-              key={index}
-              en={item.en}
-              ko={item.ko}
-            />
-          ))}
-        </View>
-      </View>
-
-      {/* Menu */}
-      <View style={styles.section}>
-        <SectionHeader title="메뉴 안내" />
-
-        <View style={styles.cardList}>
-          {menuItems.map((item, index) => (
-            <TranslationCard
-              key={index}
-              en={item.en}
-              ko={item.ko}
-            />
-          ))}
-        </View>
-      </View>
-
-      {/* Buttons */}
-      <View style={styles.section}>
-        <SectionHeader title="버튼 • 링크" />
-
-        <View style={styles.cardList}>
-          {buttonItems.map((item, index) => (
-            <TranslationCard
-              key={index}
-              en={item.en}
-              ko={item.ko}
-              green
-            />
-          ))}
-        </View>
+        ))}
       </View>
 
       {/* Footer */}
       <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          총 11문장 번역 완료
-        </Text>
+        <Text style={styles.footerText}>AI 요약 제공</Text>
 
         <View style={styles.dot} />
 
-        <Text style={styles.footerText}>
-          Google Translate
-        </Text>
+        <Text style={styles.footerText}>Google Translate</Text>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-    paddingHorizontal: 10,
+    paddingTop: 14,
+    paddingHorizontal: 16,
+    paddingBottom: 24,
   },
 
-  content: {
-    paddingHorizontal: 8,
-    paddingTop: 20,
-    paddingBottom: 40,
-  },
-
-  topBar: {
+  header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 20,
   },
 
-  languageRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-
-  languageChip: {
+  badge: {
     backgroundColor: "#EEF2FF",
+    borderRadius: 10,
+    paddingVertical: 4,
     paddingHorizontal: 10,
-    height: 32,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
   },
 
-  countChip: {
-    backgroundColor: "#EEF2FF",
-    paddingHorizontal: 12,
-    height: 30,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  chipText: {
+  badgeText: {
     fontSize: 11,
     fontWeight: "700",
     color: "#4338CA",
   },
 
-  section: {
-    marginBottom: 24,
-  },
-
-  sectionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-    gap: 8,
-  },
-
-  sectionTitle: {
-    fontSize: 10,
-    fontWeight: "800",
-    color: "#9097B8",
-    letterSpacing: 0.7,
-    textTransform: "uppercase",
-  },
-
-  divider: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#ECEDF5",
-  },
-
-  titleCard: {
-    backgroundColor: "#EEF2FF",
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingTop: 12,
-    paddingBottom: 14,
-    gap: 4,
-  },
-
-  cardList: {
-    gap: 5,
-  },
-
-  card: {
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingTop: 9,
-    paddingBottom: 12,
-    borderLeftWidth: 3,
-    gap: 2,
-  },
-
-  purpleCard: {
-    backgroundColor: "#F9FAFB",
-    borderLeftColor: "#EEF2FF",
-  },
-
-  greenCard: {
-    backgroundColor: "#ECF9F5",
-    borderLeftColor: "#C7E7DD",
-  },
-
-  enText: {
+  countText: {
     fontSize: 11,
-    lineHeight: 16,
-    color: "#9CA3AF",
-    fontWeight: "400",
+    color: "#6B7280",
   },
 
-  koText: {
-    fontSize: 13,
-    lineHeight: 19,
-    color: "#111827",
-    fontWeight: "600",
+  content: {
+    marginTop: 12,
+    gap: 10,
   },
 
-  titleKo: {
+  bulletRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
+
+  bullet: {
+    width: 14,
+    fontSize: 16,
+    lineHeight: 23,
+    color: "#4338CA",
+  },
+
+  summaryText: {
+    flex: 1,
     fontSize: 14,
-    lineHeight: 20,
-    color: "#1E1B4B",
-    fontWeight: "800",
-  },
-
-  greenKoText: {
-    color: "#065F46",
+    fontWeight: "500",
+    lineHeight: 23,
+    color: "#111827",
   },
 
   footer: {
+    marginTop: 12,
+    paddingTop: 8,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 6,
-    marginTop: 4,
   },
 
   footerText: {
     fontSize: 11,
-    lineHeight: 16,
     color: "#9097B8",
   },
 
   dot: {
     width: 3,
     height: 3,
-    borderRadius: 2,
+    borderRadius: 1.5,
     backgroundColor: "#D1D5DB",
+    marginHorizontal: 6,
   },
 });

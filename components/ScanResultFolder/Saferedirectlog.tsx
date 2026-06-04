@@ -72,6 +72,8 @@ const SafeRedirectLog = ({ redirect, onCopy }: Props) => {
         </TouchableOpacity>
       </View>
 
+
+
       {/* INFO */}
       <View style={styles.infoRow}>
         {/* Redirect */}
@@ -108,6 +110,37 @@ const SafeRedirectLog = ({ redirect, onCopy }: Props) => {
           </Text>
         </View>
       </View>
+      <View style={styles.urllistCard}>
+  <Text style={styles.infoLabel}>
+    리다이렉션 로그
+  </Text>
+
+  {redirect.chain.map((url, index) => (
+    <View key={index} style={styles.logItem}>
+      <View style={styles.numberCircle}>
+        <Text style={styles.numberText}>
+          {index + 1}
+        </Text>
+      </View>
+
+      <View style={styles.logTextContainer}>
+        <Text
+          style={styles.urlList}
+          numberOfLines={1}
+          ellipsizeMode="middle"
+        >
+          {url}
+        </Text>
+
+        <Text style={styles.urlLabel}>
+          상태 코드:{" "}
+          {redirect.status_codes[index] ?? 200}
+        </Text>
+      </View>
+    </View>
+  ))}
+</View>
+
     </>
   );
 };
@@ -216,6 +249,20 @@ const styles = StyleSheet.create({
     color: "#1E1B4B",
     marginBottom: 2,
   },
+  urllistCard: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 12,
+  },
+  urlList: {
+    fontSize: 12,
+    fontWeight: "800",
+    lineHeight: 24,
+    color: "#1E1B4B",
+    marginBottom: 2,
+  },
 
   infoSubText: {
     fontSize: 10,
@@ -223,4 +270,30 @@ const styles = StyleSheet.create({
     lineHeight: 15,
     color: "#9097B8",
   },
+  logItem: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: 12,
+  },
+  numberCircle: {
+    width: 16,
+    height: 16,
+    borderRadius: 14,
+    backgroundColor: "#EEF2FF",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+    marginTop: 6,
+  },
+   logTextContainer: {
+    flex: 1,
+  },
+
+  numberText: {
+  fontSize: 9,
+  fontWeight: "700",
+  color: "#4B5274",
+  lineHeight: 11,
+},
+
 });

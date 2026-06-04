@@ -35,7 +35,7 @@ const XaiDangerCard = ({
       {/* Warning Box */}
       <View style={styles.warningBox}>
         <Text style={styles.warningText}>
-          {warningText ??
+          {warningText?.trim() ||
             "절대 접속하지 마세요! 개인정보가 유출될 수 있어요."}
         </Text>
       </View>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
 
   warningBox: {
-    backgroundColor: "#F7E2E2",
+    backgroundColor: "#FBEAEA",
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 12,
