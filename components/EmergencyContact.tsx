@@ -1,23 +1,23 @@
 import React, { useState } from "react";
 import {
-    Linking,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import {
-    AlertCircle,
-    Building2,
-    Hospital,
-    Info,
-    MapPin,
-    Phone,
-    Search,
-    Shield,
+  AlertCircle,
+  Building2,
+  Hospital,
+  Info,
+  MapPin,
+  Phone,
+  Search,
+  Shield,
 } from "lucide-react-native";
 
 interface EmergencyProps {
@@ -40,37 +40,47 @@ export default function Emergency({ country }: EmergencyProps) {
   const emergencyContacts: EmergencyContact[] = [
     {
       id: 1,
-      name: "주일본 대한민국 대사관",
+      name: "주프랑스 대한민국 대사관",
       type: "embassy",
-      phone: "+81-3-3452-7611",
-      address: "도쿄도 미나토구 미나미아자부 1-2-5",
-      hours: "평일 09:00 - 17:30",
+      phone: "+33-1-4753-0101",
+      address: "41 Rue Saint-Dominique, 75007 Paris, 프랑스",
+      hours: "평일 09:30 - 16:30",
       distance: "2.3km",
     },
     {
       id: 2,
       name: "긴급영사 콜센터",
       type: "helpline",
-      phone: "+81-3-3452-7860",
+      phone: "+33-6-8028-5396",
       address: "24시간 운영",
       hours: "연중무휴 24시간",
     },
     {
       id: 3,
-      name: "일본 경찰 (긴급)",
+      name: "프랑스 경찰 (긴급)",
       type: "police",
-      phone: "110",
+      phone: "112",
       address: "전국 어디서나",
       hours: "연중무휴 24시간",
     },
     {
       id: 4,
-      name: "일본 구급차/소방서",
+      name: "프랑스 응급의료",
       type: "hospital",
-      phone: "119",
+      phone: "15",
+      address: "전국 어디서나",
+      hours: "연중무휴 24시간",
+    },{
+      id: 5,
+      name: "프랑스 소방서",
+      type: "hospital",
+      phone: "18",
       address: "전국 어디서나",
       hours: "연중무휴 24시간",
     },
+    
+
+    
   ];
 
   const filteredContacts = emergencyContacts.filter(
@@ -108,7 +118,7 @@ export default function Emergency({ country }: EmergencyProps) {
       <View style={styles.alertCard}>
         <AlertCircle size={24} color="#dc2626" />
         <Text style={styles.alertText}>
-          생명이 위험한 상황에서는 즉시 110(경찰) 또는 119(구급)으로 연락하세요.
+          생명이 위험한 상황에서는 즉시 112(경찰) 또는 15(구급)으로 연락하세요.
         </Text>
       </View>
 

@@ -28,7 +28,6 @@ export function ScanHistory() {
     useCallback(() => {
       const fetchData = async () => {
         const data = await loadScanRecords();
-        console.log("불러온 데이터:", data);
         setRecords(data);
       };
       fetchData();

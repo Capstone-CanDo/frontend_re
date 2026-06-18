@@ -6,12 +6,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    padding: 12, 
-  },
   errortext: {
     fontSize: 20,
     fontWeight: "bold",
@@ -24,7 +18,7 @@ export const styles = StyleSheet.create({
   },
   back: {
     fontSize: 20,
-    marginRight: 12,
+
   },
   logo: {
     width: 120, // 원하는 너비
@@ -37,6 +31,7 @@ export const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
+    paddingBottom: 80,
   },
   card: {
     padding: 16,
@@ -131,14 +126,10 @@ resultText: {
     padding: 16,
     borderRadius: 12,
     backgroundColor: "#ffe5e5",
-    marginTop: 10,
+    marginTop: 8,
+    marginBottom: 12,
   },
-  xaicontainer: {
-    flex: 1,
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 16,
-  },
+  
   xaiheader: {
     flexDirection: "row",
     alignItems: "center",
@@ -223,4 +214,103 @@ resultText: {
     fontSize: 13,
     fontWeight: "500",
   },
+
+  xaicontainer: {
+    width: "100%",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 18,
+    padding: 16,
+  },
+
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 16,
+  },
+
+  iconBox: {
+    width: 30,
+    height: 30,
+    borderRadius: 9,
+    backgroundColor: "#EEF2FF",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+
+ xaititle: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#1E1B4B",
+  },
+
+  floatingButton: {
+  position: "absolute",
+  left: 16,
+  right: 16,
+  bottom: 12,
+
+  height: 56,
+
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+
+  backgroundColor: "#404040",
+  borderRadius: 18,
+   zIndex: 999,
+  elevation: 10,
+
+  shadowColor: "#404040",
+  shadowOffset: {
+    width: 0,
+    height: 8,
+  },
+  shadowOpacity: 0.2,
+  shadowRadius: 24,
+
+
+},
+securityButtonText: {
+fontSize: 15,
+  fontWeight: "700",
+  lineHeight: 22,
+  textAlign: "center",
+  color: "#FFFFFF",
+},
+header: {
+  height: 60,
+
+  backgroundColor: "#FFFFFF",
+
+  borderBottomWidth: 1,
+  borderBottomColor: "#ECEDF5",
+
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+
+  paddingLeft: 16,
+  paddingRight: 16,
+},
+
+headerBackButton: {
+  width: 36,
+  height: 36,
+
+  borderRadius: 10,
+  backgroundColor: "#EDEEF7",
+
+  justifyContent: "center",
+  alignItems: "center",
+},
+
+headerTitle: {
+  fontSize: 16,
+  fontWeight: "700",
+  lineHeight: 24,
+
+  color: "#1E1B4B",
+},
 });

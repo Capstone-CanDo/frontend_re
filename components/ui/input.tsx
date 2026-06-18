@@ -1,8 +1,8 @@
 import React from "react";
-import { StyleProp, StyleSheet, TextInput, TextStyle } from "react-native";
+import { StyleProp, StyleSheet, TextInput, TextInputProps, TextStyle } from "react-native";
 import { theme } from "../../constants/index";
 
-interface InputProps {
+interface InputProps extends TextInputProps {
   value?: string;
   onChangeText?: (text: string) => void;
   placeholder?: string;

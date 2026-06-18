@@ -1,6 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+
 import { Badge } from "../ui/badge";
 import { Card, CardTitle } from "../ui/card";
 
@@ -10,35 +16,106 @@ interface TravelCardProps {
   endDate: string;
   duration: number;
   status: string;
+
+  onPressInfo?: () => void;
+  onPressDate?: () => void;
 }
 
-export function TravelCard({ country, startDate, endDate, duration, status }: TravelCardProps) {
+export function TravelCard({
+  country,
+  startDate,
+  endDate,
+  duration,
+  status,
+  onPressInfo,
+  onPressDate,
+}: TravelCardProps) {
   return (
-    <Card style={styles.card}>
-      <View style={styles.topRow}>
-        <View style={styles.titleGroup}>
-          <CardTitle>내 여행</CardTitle>
-          <View style={styles.countryRow}>
-            <Ionicons name="location-outline" size={16} color="#4A5565" />
-            <Text style={styles.countryText}>{country}</Text>
-          </View>
-        </View>
-        <Badge variant="outline">{status}</Badge>
-      </View>
+    <View style={styles.container}>
 
-      <View style={styles.dateRow}>
-        <Ionicons name="calendar-outline" size={16} color="#6A7282" />
-        <Text style={styles.dateText}>{startDate} - {endDate}</Text>
-        <Text style={styles.durationText}>({duration}일)</Text>
-      </View>
-    </Card>
+      {/* 여행 정보 카드 */}
+      <Pressable
+        onPress={onPressInfo}
+        style={({ pressed }) => [
+          styles.pressable,
+          pressed && styles.pressed,
+        ]}
+      >
+        <Card style={styles.card}>
+          <View style={styles.topRow}>
+
+            <View style={styles.titleGroup}>
+              <CardTitle>내 여행</CardTitle>
+
+              <View style={styles.countryRow}>
+                <Ionicons
+                  name="location-outline"
+                  size={16}
+                  color="#4A5565"
+                />
+
+                <Text style={styles.countryText}>
+                  {country}
+                </Text>
+              </View>
+            </View>
+
+            <Badge variant="outline">
+              {status}
+            </Badge>
+
+          </View>
+        </Card>
+      </Pressable>
+
+      {/* 기간 카드 */}
+      <Pressable
+        onPress={onPressDate}
+        style={({ pressed }) => [
+          styles.pressable,
+          pressed && styles.pressed,
+        ]}
+      >
+        <Card style={styles.card}>
+          <View style={styles.dateRow}>
+
+            <Ionicons
+              name="calendar-outline"
+              size={16}
+              color="#6A7282"
+            />
+
+            <Text style={styles.dateText}>
+              {startDate} - {endDate}
+            </Text>
+
+            <Text style={styles.durationText}>
+              ({duration}일)
+            </Text>
+
+          </View>
+        </Card>
+      </Pressable>
+
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    gap: 0,
+  },
+
+  pressable: {
+    borderRadius: 18,
+  },
+
+  pressed: {
+    opacity: 0.8,
+  },
+
   card: {
     padding: 24,
-    gap: 40,
   },
 
   topRow: {

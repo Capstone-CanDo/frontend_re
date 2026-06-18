@@ -125,7 +125,7 @@ export function Login({ onLogin }: LoginProps) {
                   onPress={() => setRememberMe(!rememberMe)}
                 >
                   <Text style={styles.remember}>
-                    {rememberMe ? "☑" : "☐"} 로그인 유지
+                    {rememberMe ? "☑" : "☐"} 아이디 저장
                   </Text>
                 </TouchableOpacity>
 
@@ -151,6 +151,7 @@ export function Login({ onLogin }: LoginProps) {
               <Button onPress={handleLogin}>
                 <Text style={{ color: "white", fontSize: 16 }}>로그인</Text>
               </Button>
+
 
               {/* 회원가입 */}
               <View style={styles.signup}>
