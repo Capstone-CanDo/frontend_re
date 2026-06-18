@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "QTravel",
+    "name": "Lynk+",
     "slug": "QTravel",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -37,6 +37,11 @@
     },
     "plugins": [
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "9f300e6a-ae19-4eb9-9616-8f73ec668325"
+      }
+    }
   }
 }

@@ -28,6 +28,10 @@ export default function QRScanner({ onScan }: QRScannerProps) {
       label: "의심 URL 테스트",
       url: "lululalalifegood",
     },
+    {
+      label: "리다이렉션 테스트",
+      url: "https://bit.ly/4mvcrTh",
+    },
   ];
 
   return (

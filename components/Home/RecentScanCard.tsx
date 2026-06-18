@@ -16,7 +16,16 @@ export function RecentScanCard() {
   useEffect(() => {
     const fetch = async () => {
       const data = await loadScanRecords();
-      setRecords(data.slice(0, 3));
+
+const latestThree = [...data]
+  .sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() -
+      new Date(a.created_at).getTime()
+  )
+  .slice(0, 3);
+
+setRecords(latestThree);
     };
     fetch();
   }, []);
@@ -116,6 +125,7 @@ const styles = StyleSheet.create({
   itemContent: {
     flex: 1,
     gap: 4,
+    marginBottom: 12,
   },
 
   urlRow: {
@@ -147,6 +157,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(37, 99, 235, 0.1)",
     borderRadius: 8,
     marginBottom: 12,
+    marginTop: -12,
   },
 
   openBtnText: {

@@ -16,9 +16,6 @@ import {
 import RiskAnalysisLoadingCard from "./RiskAnalysisLoadingCard";
 import RiskAnalysisResultCard from "./RiskAnalysisResultCard";
 
-import RiskBuyResultCard from "./RiskBuyResultCard";
-import TranslationBuyScreen from "./TranslationBuyScreen";
-import TranslationGiftcard from "./TranslationGiftcard";
 import TranslationLoadingCard from "./TranslationLoadingCard";
 import TranslationResultScreen from "./TranslationResultScreen";
 
@@ -251,20 +248,12 @@ export function BrowserBottomSheet({
         "translate" ? (
           isLoading ? (
             <TranslationLoadingCard />
-          ) : isGiftcardPage ? (
-            <TranslationGiftcard />
-          ) : isBuyPage ? (
-            <TranslationBuyScreen/>
           ) : (
             <TranslationResultScreen />
           )
         ) : isLoading ? (
           <RiskAnalysisLoadingCard />
-        ) : isCheckoutPage ? (
-          <RiskAnalysisResultCard />
-        ) : isBuyPage ? (
-          <RiskBuyResultCard/>
-        ) :  (
+        ) : (
           <RiskAnalysisResultCard />
         )}
       </View>
