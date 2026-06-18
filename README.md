@@ -1,176 +1,115 @@
-# frontend\_re
+# 🛡️ Lynk+ — FE (React Native · Expo)
 
-expo 기반으로 다시 만든 프엔 레포
+해외여행자가 QR코드를 스캔했을 때 발생할 수 있는 피싱(큐싱) 위험을 최소화하기 위한 AI 기반 보안 서비스 Lynk+의 프론트엔드 레포지토리입니다.
 
-### 현재 진행 상황
+본 앱은 **Expo + React Native + Expo Router(파일 기반 라우팅)** 구조로 구성되어 있습니다.
 
-1. ✨ BE Json 응답 형식이 달라진것을 반영했습니다.
-2. 🎨 스캔 결과, 스캔 기록 화면 UI를 수정했습니다.
+---
 
-### 다음 브랜치에서 진행 예정인 사항
+## 기술 스택
 
-1. 🎨 스캔 결과 화면 ui 수정
-2. 🐞 로그인 기능 관련 버그는 추후 다른 브랜치에서 수정할 예정입니다.
-3. ✨ 웹 뷰 모달 관련 데이터
+| Category | Technology |
+| --- | --- |
+| **Frontend Framework** | React Native (Expo SDK 54) |
+| **Routing** | Expo Router |
+| **Language** | TypeScript |
+| **State Management** | Context API, Zustand |
+| **Server State** | TanStack Query |
+| **Network Communication** | Axios |
+| **UI Library** | React Native Paper |
+| **Styling** | Styled Components |
+| **Local Storage** | Expo Secure Store, AsyncStorage |
+| **Build & Deployment** | Expo Dev Client, EAS Build |
 
-## 0517 진행상황
+---
 
-- ✨ 스캔 결과 화면에서 Json 응답 형식이 달라진것을 반영했습니다.
-- 🎨 스캔 결과 화면의 1차 ui 수정을 반영했습니다.
-- 🎨 웹 뷰 결과 화면의 ui 수정을 반영했습니다.
-- 🎨 홈 화면에서 여행 국가, 기간 선택 ui를 추가했습니다.
+## 📂 폴더 구조 (Folder Structure)
 
-## 0409 진행상황
+프로젝트의 주요 디렉토리 구조입니다.
 
-- ✨ 스캔 결과 화면에서 url 검증 로직을 추가했습니다. url이 아닌걸로 확인 시 백엔드로 요청을 보내지 않게 했습니다.
-- ✨ 스캔 결과 화면에서 url 복사 기능을 구현했습니다.
-- 🐞 ERROR  Text strings must be rendered within a <Text> component. 가 이제 안뜨더라고요. 저도 이유는 잘 모르겠습니다. 혹시 이 오류가 생기면 알려주세요.
-- 🐞 components\ScanHistory\ScanHistory.tsx에 const data = await loadScanRecords(); 부분 오류표시 수정했습니다.
-- 🎨 스캔 결과 화면 UI를 수정했습니다. 수정 내용은 스크린샷을 참고해주세요. 리다이렉션 로그의 경우 BE 기능 추가 후 수정하겠습니다.
-- 🧺 카메라 대신 url 확인하는 코드 (components\Scan\QRScannerProps.tsx) 에서 정상, 의심 url을 대체했습니다. 원래 쓰던거 하니까 정상이 악성으로 뜨더라고요. 의심 url은 url 검증 로직 확인용으로 url이 아닌 문자열로 바꿨습니다.
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/ae1d084e-c214-456c-be0c-963bd30cf4cb" width="30%" />
-  <img src="https://github.com/user-attachments/assets/2787eaf6-23ed-479a-a800-5f4fda96add6" width="30%" />
-  <img src="https://github.com/user-attachments/assets/b7b1c7f3-88af-453f-8b0f-9b5cbd77ecc9" width="30%" />
-</p>
+```bash
+├─app
+│  │  index.tsx               # 앱 시작 및 폰트 로딩
+│  │  ScanResultScreen.tsx    # 스캔 결과 화면 라우팅
+│  │  WebViewScreen.tsx       # 웹 뷰 화면 라우팅, js 실행 제어
+│  │  _layout.tsx             # 화면 라우팅
+│  ├─(auth)/                  # 로그인 페이지 라우팅
+│  └─(tabs)                   # Expo Router 기반 페이지 라우팅 (Tabs, Stacks)
+│      │  emergency.tsx       # 긴급 연락처 화면 라우팅
+│      │  index.tsx           # 홈 화면 라우팅
+│      │  my.tsx              # 마이페이지 화면 라우팅
+│      │  _layout.tsx         # 화면 라우팅
+│      ├─history/             # 스캔 기록 화면 라우팅
+│      └─scan/                # 카메라 스캔 화면 라우팅
+├─assets                      # 이미지, 폰트 
+├─components                  # 컴포넌트
+│  │  AppText.tsx             # 폰트 적용 코드
+│  │  EmergencyContact.tsx    # 긴급연락처 화면 코드
+│  ├─Home/                    # 홈 화면 컴포넌트
+│  ├─Login/                   # 로그인 화면 컴포넌트
+│  ├─Scan/                    # 스캔 화면 컴포넌트. 카메라 촬영화면, 테스트용 화면
+│  ├─ScanHistory/             # 스캔 기록 화면
+│  ├─ScanResultFolder/        # 스캔 결과 화면 컴포넌트
+│  ├─ui/                      # 공통 ui 컴포넌트(버튼, 카드 등)
+│  └─WebView/                 # 웹 뷰 화면 컴포넌트
+├─constants/                  # 공통 테마 정리
+├─context/                    # 전역 상태 관리
+├─data/                       # 스캔 기록 데이터 관리
+└─util/                       # 필요한 기능 코드
+        auth.ts               # 로그인 유효성 확인
+        storage.ts            # AsyncStorage 관리
+        timeAgo.ts            # 상대 시간 계산
+        urlAnaylze.ts         # URL 분석 API 연동
+        UrlValid.ts           # url 유효성 검증 코드
+```
 
+---
 
+## How to Install
 
-## 0407 진행상황
+### 1. 레포지토리 클론
 
-- 🐞 ERROR  Text strings must be rendered within a <Text> component. -> SafeAreaProvider 때문에 일어나는 오류입니다. 텍스트 필드 때문이 아닙니다. 이거 저도 어떻게 고쳐야 할지 모르겠습니다... 나중에 고칠테니 무시해주세요.
-- 🐞 스캔 기록 상태가 제대로 인식되지 않는 버그를 수정했습니다.
-- 🐞 스캔 기록을 최근 기록을 위에 보여주도록 수정했습니다.
-- 🐞 components\ScanHistory\ScanHistory.tsx에 const data = await loadScanRecords(); 부분 오류표시를 할 것입니다. 아직 AsyncStorage상에 데이터가 없어서 오류 표시 하는 것인데 데이터가 없는 상태에서도 동작하고 서버에서 데이터 가져오면 해결되는 문제라서 일단 무시해주세요.
-- 🎨 스캔 결과 UI를 수정했습니다. 추후 더 수정할 예정입니다.
-  - 일단 ppt에 예전 로고 쓰길래 일단 스캔 결과에도 올려놨습니다.
-  - 피그마 프로토타입이랑 UI를 맞췄는데 아직 리다이렉션 부분과 아이콘 추가를 안했습니다.
-  - AI 판단 근거 버튼 안에 정렬이 이상하게 되는 문제가 있습니다.
+```bash
+git clone https://github.com/Capstone-CanDo/frontend_re.git 
+cd QTravel
+```
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/832d64e2-7408-4f2a-b731-27400514b148" width="45%" />
-  <img src="https://github.com/user-attachments/assets/6de6676a-db25-43ba-9220-af0997f2b4d8" width="45%" />
-</p>
+### 2. 패키지 설치
 
-
-
-## 0406 진행상황 & 환경가이드
-
-현재 BE 연동을 위한 로그인, 스캔 결과 연동과 스캔 기록 연동을 구현했습니다.
-
-- 📚 npx expo install expo-secure-store 필요합니다. 자세한 내용은 9번 브랜치 확인 부탁드립니다.
-- 🐞 (tabs)/_layout.tsx의 하단바가 ios 상에서 원하는 위치에서 더 뜨게 나오는 문제를 SafeAreaProvider 를 사용해서 수정했습니다. 다만 아직 하단바 네비게이션 메뉴가 정상적으로 나오지 않는 문제는 수정하지 않았습니다. 현재 제 안드로이드 기기 상에서는 정상적으로 나오지만, ios상에서 어떻게 나오는지 확인 부탁드립니다.
-- ✨ 로그인 기능 구현했습니다. 현재 로그인 화면이 나오고 이메일과 비밀번호 입력은 가능하지만 실제로는 무엇을 입력해도 username: "testuser1", password: "testpass123"로 로그인 하게 됩니다. 아직 로그인 기능을 제대로 구현할 계획은 없으니 일단은 이대로 충분할 것 같습니다.
-  - 로그인에 실패해도 다음 페이지로 넘어가는 버그가 있고 아직 자동 로그인 기능과 로그아웃 기능을 손보지 못했습니다. 이후 이 점 수정 예정입니다.
-- ✨ 스캔 결과 BE 연동했습니다.
-  - 아직 UI 수정을 못해서 추후 수정 예정입니다.
-- ✨ 스캔 기록 BE 연동했습니다.
-  - 기존에 Status를 사용해 "safe" | "malicious" | "suspicious" 분류해서 UI를 만들었는데 JSON 응답에는 is_phishing: "True" | "False"; 이렇게 와서 정상이거나 악성인 url이 위험 url로 뜨는 버그가 있습니다. 추후 ScanHistort.tsx 수정할 예정입니다.
-
-
-## 0402 진행상황
-
-현재 scanresult와 scanhistory가 BE 연동과 구조가 맞지 않는것을 수정했습니다. 현재 UI상 작동을 확인하기 위해 JSON을 위한 코드는 주석처리되어 있고, 하드코딩된 데이터가 대신 동작하고 있습니다.
-
-<img width="340" height="770" alt="image" src="https://github.com/user-attachments/assets/ed49638e-86eb-443c-b37b-7e365d2bf92d" />
-<img width="340" height="770" alt="image" src="https://github.com/user-attachments/assets/40ab5003-47ac-4c35-8a1a-ef888b181a81" />
-
-
-
-추후 UI 수정을 하도록 하겠습니다
-
-## 0330 진행상황\&환경가이드
-
-app.json 에 react-native-vision-camera가 아직 안지워져서 확인 부탁드립니다.
-
-rd /s /q node\_modules
-del package-lock.json
+```bash
 npm install
-npx expo start -c
+```
 
+---
 
+## How to Build
 
-추가로
-npx expo install @react-native-async-storage/async-storage
-확인 부탁드립니다.
+### 앱 실행
 
+```bash
+npx expo start
+```
 
+Expo Dev Client를 통해 실행할 수 있습니다.
 
-1. 카메라 화면에서 QR 스캔 하면 그 결과를 저장하는 로직을 추가했습니다. url, 위험 단계, 날짜, 시간이 저장됩니다. 아직 위치와 위험도는 임의로 정해진 값으로 들어갑니다.
+터미널 창에 나타난 qr을 안드로이드 핸드폰 카메라로 찍으면 어플리케이션이 실행됩니다.
 
-util 폴더 
-scanMeta: url, 위험 단계, 날짜, 시간 받아주는 코드입니다. 추후 장소 정보 저장도 추가해야 합니다.
-storage: AsyncStorage를 이용해서 url 스캔 로그 저장하고 불러오고 기록 삭제하는 코드
+---
 
-AsyncStorage 를 사용해서 앱 내의 데이터에 저장되는 구조라 껐다 켜도 여전히 저장되어 있습니다.
-대신 기존에 하드코딩된 데이터는 나오지 않으므로 이 점 참고해 주시기 바랍니다.
+## How to Test
 
-2. QR 스캔 기록 데이터를 삭제하는 버튼을 ScanHistory 화면에 추가했습니다. 버튼을 누르고 난 후 다른 화면으로 이동하고 오면 삭제된 것이 반영됩니다. AsyncStorage는 기기 내의 데이터를 건드리는 구조라 커맨드로는 안되고 이 버튼으로만 가능합니다. 원래 버튼 누르면 바로 보이게 하려고 했는데 안되더라고요... 그런데 이거는 디버깅용이고 실제 화면에서는 안 쓸 거니까 그냥 뒀습니다.
+앱 내 카메라를 통해 qr을 찍고 결과를 확인한다. (에뮬레이터의 경우 카메라를 사용할 수 없습니다.)
 
-3. 웹뷰를 띄우는 방식을 변경했습니다. 원래는 scanresult 화면에서 모달을 띄우는 형식이었는데 이렇게 하면 스캔 기록 화면에서 띄우는것도 어렵고 웹뷰 화면에서 뒤로 가기를 눌렀을때 같은 정보가 두번 저장되는 문제가 있어서. 라우팅 용 WebViewScreen.tsx 코드를 하나 만들어서 라우팅으로 렌더링되게 바꿨습니다.
+보안 브라우저를 열어 js 실행이 제어되는지 확인한다.
 
-4. app\\\_layout.tsx에서 headerShown: false로 설정했습니다.
+---
 
-## 0327 진행상황
+## License
 
-스캔 결과화면, 스캔 기록 화면의 데이터 부분 코드에서 분리. 향후 스캔하면 기록에 추가되는 부분 추가할 예정
+This project is developed for an academic capstone course.
 
-## 0326 진행상황 \& 환경가이드
+All rights reserved unless otherwise specified.
 
-일단 스캔 결과 화면 적당히 만들어뒀습니다.
-앱 기동에 필요한 다른 자잘한 코드들 넣어뒀습니다.
-
-카메라 expo go에서도 돌아가게 하고 다시 확인
--> 깃허브 반영해주시고
-npx expo uninstall react-native-vision-camera
-npx expo start -c
-순으로 실행해주세요.
-
-## 0324 진행상황 \& 환경 가이드
-
-카메라 기능 추가했습니다. 현재 카메라로 QR 촬영 -> 결과 화면으로 이동 까지 구현한 상태입니다.
-
-UI에서 검은색 반투명 테두리는 곡선 부분을 아직 구현을 못했습니다.
-
-카메라에서 QR이 인식되는 범위 제한이 안되더라고요... 그래도 일단 피그마 프로토타입대로 구현했습니다.
-
-json 파일 확인해주시고, install 다시 해주세요. 카메라 환경설정 부분이 ios에서도 되는지 한 번 확인해주세요.
-
-파일 구조 변경이 있으니 확인해주세요.
-
-## 0319 진행상황 \& 환경 가이드
-
-폰트 프리텐다드로 스캔 결과 화면만 일단 통일했습니다.
-
-import { theme } from "../../constants/index";
-
-text속성에 fontFamily: theme.fontFamily.regular 추가해주세요.
-
-asset/font 안에
-
-Pretendard-Regular.ttf
-
-Pretendard-Medium.ttf
-
-Pretendard-Bold.ttf
-
-이렇게 있어야 합니다. 파일 크기 때문에 깃허브에 올리지는 않고 알아서 넣어주세요.
-
-constants\\index.ts 안의 colors, fontcolor 이 부분 확인해주시면 감사하겠습니다. 만약 색상을 바꿀 경우 통일을 쉽게 하기 위함이니 한 번 확인해주세요.
-
-## 0307 진행상황 \& 환경 가이드
-
-피그마 QR 스캔 페이지와 스캔 분석 화면. 아직 카메라는 연결 못함
-
-package.json 확인. npm install로 다운로드 하세요.
-
-버전 등을 확인해주시기 바랍니다.
-
-먼저 npx create-expo-app QTravel 로 기본 앱 만든 후에
-
-app 폴더는 원래 있던 내용 제거하고 깃허브 코드로 교체.
-
-component 폴더에 있는 내용은 원래 있던 내용에 추가.
-
-초기 코드, asset은 정리할 예정이지만 지금은 없애면 오류남
-
+- **No commercial use** without explicit permission from the project team.
+- **No redistribution** of source code or assets without permission.
+- If you need to reuse any part of this repository (code, UI, images, icons), please contact the maintainers first.
